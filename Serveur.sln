@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serveur", "Serveur.vcxproj", "{38A27035-2A09-42B4-AC9B-9E952BBE3F42}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "..\Client\Client.vcxproj", "{FD6534AD-F29A-4339-B19A-DD358C84B530}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Client.vcxproj", "{FD6534AD-F29A-4339-B19A-DD358C84B530}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
