@@ -3,11 +3,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include "Players.h"
 
 const int SIZE = 3;
-const int WINDOW_SIZE = 300;
-
-enum class Player { None, Cross, Circle };
 
 class Game
 {
@@ -25,9 +23,11 @@ public:
 	void CheckWinner();
 	void DisplayWinner();
 
-private:
 	Player currentPlayer;
+
+private:
 	Player board[SIZE][SIZE];
 	bool end = false;
+	Players players;
 
 };

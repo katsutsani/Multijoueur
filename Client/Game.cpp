@@ -118,6 +118,8 @@ void Game::Render(sf::RenderWindow& window)
         }
     }
 
+    players.Draw(window, currentPlayer);
+
     window.display();
 }
 
