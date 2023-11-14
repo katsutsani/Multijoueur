@@ -3,6 +3,7 @@
 
 #include "framework.h"
 #include "Serveur.h"
+#include "ServerSocket.h"
 
 #define MAX_LOADSTRING 100
 
@@ -10,6 +11,7 @@
 HINSTANCE hInst;                                // instance actuelle
 WCHAR szTitle[MAX_LOADSTRING];                  // Texte de la barre de titre
 WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre principale
+ServerSocket servSock;
 
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -47,6 +49,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
         {
+            if (listen(servSock.ListenSocket, SOMAXCONN) == SOCKET_ERROR) {
+                printf("listen failed with error: %ld\n", WSAGetLastError());
+                closesocket(servSock.ListenSocket);
+                WSACleanup();
+            }
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
@@ -104,7 +111,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    {
       return FALSE;
    }
-
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
