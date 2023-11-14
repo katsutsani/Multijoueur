@@ -12,7 +12,9 @@ public:
 	ClientSocket();
 	~ClientSocket();
 	SOCKET ConnectSocket = INVALID_SOCKET;
-
+	void SendInfo(const char* sendbuf);
+	void ShutDown();
+	void ReceiveInfo();
 private:
 	int iResult;
 	WSADATA wsaData;

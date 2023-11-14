@@ -43,7 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SERVEUR));
 
     MSG msg;
-
+    int player = 0;
     // Boucle de messages principale :
     while (GetMessage(&msg, nullptr, 0, 0))
     {
@@ -54,6 +54,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 closesocket(servSock.ListenSocket);
                 WSACleanup();
             }
+          
+
+            // Accept a client socket
+            if (player != 2) {
+                SOCKET ClientSocket = INVALID_SOCKET;
+
+                ClientSocket = accept(servSock.ListenSocket, NULL, NULL);
+                if (ClientSocket == INVALID_SOCKET) {
+                    printf("accept failed: %d\n", WSAGetLastError());
+                    closesocket(servSock.ListenSocket);
+                    WSACleanup();
+                    return 1;
+                }
+                player++;
+            }
+            
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
