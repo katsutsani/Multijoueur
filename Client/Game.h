@@ -4,7 +4,7 @@
 #include <ctime>
 #include <iostream>
 
-const int SIZE = 3;
+const int _SIZE = 3;
 const int WINDOW_SIZE = 300;
 
 enum class Player { None, Cross, Circle };
@@ -27,7 +27,7 @@ public:
 
 private:
 	Player currentPlayer;
-	Player board[SIZE][SIZE];
+	Player board[_SIZE][_SIZE];
 	bool end = false;
 
 };

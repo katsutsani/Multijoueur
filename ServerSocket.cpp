@@ -1,6 +1,6 @@
 #include "ServerSocket.h"
-#define DEFAULT_PORT "05213"
-struct addrinfo* result = NULL, * ptr = NULL, hints;
+#define DEFAULT_PORT 05213
+struct sockaddr_in hints;
 
 ServerSocket::ServerSocket() {
 
@@ -11,37 +11,32 @@ ServerSocket::ServerSocket() {
 	}
 
 	ZeroMemory(&hints, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_protocol = IPPROTO_TCP;
-	hints.ai_flags = AI_PASSIVE;
+	hints.sin_family = AF_INET;
+	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
-	if (iResult != 0) {
-		printf("getaddrinfo failed %d\n", iResult);
+	iResult = inet_pton(hints.sin_family, "10.1.1.61", &hints.sin_addr);
+	if (iResult != 1) {
+		WSAGetLastError();
+		printf("inet_pton failed %d\n", iResult);
 		WSACleanup();
 		return;
 	}
 
-	ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+	ListenSocket = socket(PF_INET, SOCK_STREAM, 0);
 
 	if (ListenSocket == INVALID_SOCKET) {
 		printf("Error at socket(): %ld\n", WSAGetLastError());
-		freeaddrinfo(result);
 		WSACleanup();
 		return;
 	}
 
-	iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
+	iResult = bind(ListenSocket, (struct sockaddr*)&hints, sizeof(hints));
 	if (iResult == SOCKET_ERROR) {
 		printf("bind failed with error: %d\n", WSAGetLastError());
-		freeaddrinfo(result);
 		closesocket(ListenSocket);
 		WSACleanup();
 		return;
 	}
-
-	freeaddrinfo(result);
 
 }
 
