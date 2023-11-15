@@ -179,6 +179,6 @@ void Game::CheckWinner()
 
 void Game::DisplayWinner()
 {
-    std::cout << "Player " << static_cast<int>(currentPlayer) << " wins!\n";
+    //std::cout << "Player " << static_cast<int>(currentPlayer) << " wins!\n";
     end = true;
 }

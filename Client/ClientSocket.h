@@ -1,9 +1,9 @@
 #pragma once
+#include "framework.h"
 #include <ws2tcpip.h>
 #include <iphlpapi.h>
 #include <stdio.h>
 #include <string.h>
-#include <iostream>
 #include <stdlib.h>
 #include <winsock2.h>
 

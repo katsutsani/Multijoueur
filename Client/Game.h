@@ -1,8 +1,7 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "framework.h"
 #include <cstdlib>
 #include <ctime>
-#include <iostream>
 
 const int _SIZE = 3;
 const int WINDOW_SIZE = 300;

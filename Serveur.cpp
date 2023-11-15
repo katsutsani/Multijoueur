@@ -12,6 +12,7 @@ WCHAR szTitle[MAX_LOADSTRING];                  // Texte de la barre de titre
 WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre principale
 ServerSocket servSock;
 HWND hWnd;
+SOCKET tempClientSocket;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -42,7 +43,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SERVEUR));
 
     MSG msg;
-    WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT);
+    WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT | FD_CLOSE);
+
     // Boucle de messages principale :
     while (GetMessage(&msg, nullptr, 0, 0))
     {
@@ -54,7 +56,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 WSACleanup();
             }
             
-
             //// Accept a client socket
             //if (players != 2) {
             //    players++;
@@ -172,7 +173,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
         case FD_ACCEPT:
 
-            SOCKET tempClientSocket = INVALID_SOCKET;
+            tempClientSocket = INVALID_SOCKET;
             servSock.ClientSocket.push_back(tempClientSocket);
             servSock.ClientSocket[servSock.players] = accept(servSock.ListenSocket, NULL, NULL);
             if (servSock.ClientSocket[servSock.players] == INVALID_SOCKET) {
@@ -183,6 +184,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
             //servSock.SendInfo(servSock.ClientSocket[servSock.players], (const char*)servSock.players);
             servSock.players++;
+            break;
+        case FD_CLOSE:
+            servSock.players--;
+            break;
         }
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
