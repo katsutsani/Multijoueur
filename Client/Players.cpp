@@ -30,7 +30,13 @@ void Players::Draw(sf::RenderWindow& window, Player currentPlayer)
 	player2.setString("Player 2");
 	player2.setCharacterSize(24);
 	player2.setStyle(sf::Text::Bold);
-	player2.setPosition(2, WINDOW_SIZE - 40);
+	player2.setPosition(2, GRID_SIZE - 40);
+
+	sf::CircleShape circle(GRID_SIZE / 32);
+	circle.setPosition(40, GRID_SIZE - 60);
+	circle.setFillColor(sf::Color::Blue);
+	circle.setOutlineThickness(5);
+	circle.setOutlineColor(sf::Color::Blue);
 
 
 	if (currentPlayer == Player::Cross) {
@@ -46,4 +52,5 @@ void Players::Draw(sf::RenderWindow& window, Player currentPlayer)
 	window.draw(player1);
 	window.draw(cross);
 	window.draw(player2);
+	window.draw(circle);
 }
