@@ -33,7 +33,7 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
     int col = (mousePos.x - INFO_SIZE) / (GRID_SIZE / SIZE);
     int row = mousePos.y / (GRID_SIZE / SIZE);
 
-    if (col >= 0 && col < SIZE && row >= 0 && row < SIZE && board[row][col] == Player::None) {
+    if (col >= 0 && col < SIZE && row >= 0 && row < SIZE && board[row][col] == Player::None && mousePos.x > INFO_SIZE) {
         board[row][col] = currentPlayer;
         CheckWinner();
         if (end == false)
