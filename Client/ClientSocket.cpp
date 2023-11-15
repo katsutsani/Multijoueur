@@ -2,7 +2,7 @@
 #define DEFAULT_PORT 05213
 struct sockaddr_in hints;
 
-ClientSocket::ClientSocket() {
+ClientSocket::ClientSocket(HWND hWnd) {
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
 		std::cout << ("WSAStartup failed: %d\n", iResult);
@@ -37,7 +37,8 @@ ClientSocket::ClientSocket() {
 
 		return;
 	}
-	SendInfo("Try to connect");
+
+	WSAAsyncSelect(ConnectSocket, hWnd, WM_USER, FD_READ| FD_WRITE);
 
 	if (ConnectSocket == INVALID_SOCKET) {
 		std::cout << ("Unable to connect to server!\n");

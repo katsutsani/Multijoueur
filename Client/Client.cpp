@@ -12,7 +12,7 @@ WCHAR szTitle[MAX_LOADSTRING];                  // Texte de la barre de titre
 WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre principale
 HWND hWnd;
 sf::RenderWindow SFMLView1;
-ClientSocket client;
+ClientSocket client(hWnd);
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -45,6 +45,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	MSG msg;
 	Game game;
 	// Boucle de messages principale :
+	//WSAAsyncSelect(client.ConnectSocket, hWnd, WM_USER, FD_WRITE);
+
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
 
@@ -54,7 +56,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 		game.Update(SFMLView1);
-		WSAAsyncSelect(client.ConnectSocket, hWnd, WM_USER, FD_READ);
 		game.Render(SFMLView1);
 	}
 
@@ -167,6 +168,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		switch (lParam)
 		{
 
+		case FD_WRITE:
+
+			client.ReceiveInfo();
+
+			break;
 		case FD_READ:
 
 			client.ReceiveInfo();

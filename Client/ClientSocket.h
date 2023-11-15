@@ -9,7 +9,7 @@
 
 class ClientSocket {
 public:
-	ClientSocket();
+	ClientSocket(HWND hWnd);
 	~ClientSocket();
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	void SendInfo(const char* sendbuf);
