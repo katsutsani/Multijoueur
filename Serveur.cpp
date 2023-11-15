@@ -44,6 +44,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
     int player = 0;
+    SOCKET ClientSocket = INVALID_SOCKET;
+
     // Boucle de messages principale :
     while (GetMessage(&msg, nullptr, 0, 0))
     {
@@ -58,7 +60,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
             // Accept a client socket
             if (player != 2) {
-                SOCKET ClientSocket = INVALID_SOCKET;
 
                 ClientSocket = accept(servSock.ListenSocket, NULL, NULL);
                 if (ClientSocket == INVALID_SOCKET) {
@@ -69,6 +70,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 }
                 player++;
             }
+
+            servSock.ReceiveInfo(ClientSocket);
             
             TranslateMessage(&msg);
             DispatchMessage(&msg);
