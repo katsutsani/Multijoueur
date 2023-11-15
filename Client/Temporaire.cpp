@@ -12,22 +12,6 @@ int main()
    RenderWindow window(sf::VideoMode(960, 960), "Main Menu", Style::Default);
    Menu mainMenu;
 
-    bool start = false;
-    bool battle = false;
-
-    RectangleShape background;
-    background.setSize(Vector2f(960, 960));
-    Texture Maintexture;
-    Maintexture.loadFromFile("texture/Background1.png");
-    background.setTexture(&Maintexture);
-
-    RectangleShape Titre;
-    Titre.setSize(Vector2f(960 * 2 / 3, 200));
-    Titre.setPosition(960 / 6, 150.f);
-    Texture TextureTitre;
-    TextureTitre.loadFromFile("texture/Titre.png");
-    Titre.setTexture(&TextureTitre);
-
 
     while (window.isOpen())
     {
@@ -61,7 +45,14 @@ int main()
                     int x = mainMenu.MenuPressed();
                     if (x == 0)
                     {
-                        
+                        sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE, GRID_SIZE), "Tic Tac Toe");
+
+                        Game game;
+
+                        while (window.isOpen()) {
+                            game.Update(window);
+                            game.Render(window);
+                        }
                     }
 
                     if (x == 1)
@@ -78,8 +69,6 @@ int main()
             }
         }
 
-        window.draw(background);
-        window.draw(Titre);
         mainMenu.draw(window);
         window.display();
     }
