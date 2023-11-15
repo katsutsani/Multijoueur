@@ -4,7 +4,6 @@
 #include "framework.h"
 #include "Serveur.h"
 #include "ServerSocket.h"
-
 #define MAX_LOADSTRING 100
 
 // Variables globales :
@@ -12,7 +11,7 @@ HINSTANCE hInst;                                // instance actuelle
 WCHAR szTitle[MAX_LOADSTRING];                  // Texte de la barre de titre
 WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre principale
 ServerSocket servSock;
-
+HWND hWnd;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -43,9 +42,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SERVEUR));
 
     MSG msg;
-    int player = 0;
-    SOCKET ClientSocket = INVALID_SOCKET;
-
+    WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT);
     // Boucle de messages principale :
     while (GetMessage(&msg, nullptr, 0, 0))
     {
@@ -56,22 +53,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 closesocket(servSock.ListenSocket);
                 WSACleanup();
             }
-          
+            
 
-            // Accept a client socket
-            if (player != 2) {
+            //// Accept a client socket
+            //if (players != 2) {
+            //    players++;
+            //}
 
-                ClientSocket = accept(servSock.ListenSocket, NULL, NULL);
-                if (ClientSocket == INVALID_SOCKET) {
-                    printf("accept failed: %d\n", WSAGetLastError());
-                    closesocket(servSock.ListenSocket);
-                    WSACleanup();
-                    return 1;
-                }
-                player++;
-            }
-
-            servSock.ReceiveInfo(ClientSocket);
+            //servSock.ReceiveInfo(ClientSocket[actualPlayer]);
             
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -123,7 +112,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Stocke le handle d'instance dans la variable globale
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
@@ -178,6 +167,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+    case WM_USER:
+        switch (lParam)
+        {
+        case FD_ACCEPT:
+
+            SOCKET tempClientSocket = INVALID_SOCKET;
+            servSock.ClientSocket.push_back(tempClientSocket);
+            servSock.ClientSocket[servSock.players] = accept(servSock.ListenSocket, NULL, NULL);
+            if (servSock.ClientSocket[servSock.players] == INVALID_SOCKET) {
+                printf("accept failed: %d\n", WSAGetLastError());
+                closesocket(servSock.ListenSocket);
+                WSACleanup();
+                break;
+            }
+            //servSock.SendInfo(servSock.ClientSocket[servSock.players], (const char*)servSock.players);
+            servSock.players++;
+        }
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }

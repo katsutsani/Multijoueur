@@ -7,7 +7,6 @@ int WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, char* szCmdLine, int iCmdShow)
     Game game;
 
     ClientSocket client;
-
     while (window.isOpen()) {
         game.Update(window);
         game.Render(window);
