@@ -47,7 +47,6 @@ ServerSocket::~ServerSocket()
 void ServerSocket::ReceiveInfo(SOCKET ClientSocket)
 {
 	char recvbuf[512];
-	int iResult;
 	do {
 		iResult = recv(ClientSocket, recvbuf, 512, 0);
 		if (iResult > 0) {
@@ -67,7 +66,6 @@ void ServerSocket::ReceiveInfo(SOCKET ClientSocket)
 
 void ServerSocket::SendInfo(SOCKET clientSocket, const char* sendBuf)
 {
-	int iResult;
 	iResult = send(clientSocket, sendBuf, (int)strlen(sendBuf), 0);
 	if (iResult == SOCKET_ERROR) {
 		std::cout << "send failed %d\n", WSAGetLastError();
@@ -76,3 +74,4 @@ void ServerSocket::SendInfo(SOCKET clientSocket, const char* sendBuf)
 		return;
 	}
 }
+

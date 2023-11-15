@@ -10,7 +10,9 @@
 HINSTANCE hInst;                                // instance actuelle
 WCHAR szTitle[MAX_LOADSTRING];                  // Texte de la barre de titre
 WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre principale
+HWND hWnd;
 sf::RenderWindow SFMLView1;
+ClientSocket client;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -42,7 +44,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	MSG msg;
 	Game game;
-	//WSAAsyncSelect(client.ConnectSocket, w, WM_SOCKET, FD_ACCEPT);
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
@@ -53,6 +54,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			DispatchMessage(&msg);
 		}
 		game.Update(SFMLView1);
+		WSAAsyncSelect(client.ConnectSocket, hWnd, WM_USER, FD_READ);
 		game.Render(SFMLView1);
 	}
 
@@ -101,7 +103,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
 	hInst = hInstance; // Stocke le handle d'instance dans la variable globale
 
-	HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_SYSMENU | WS_VISIBLE,
+	hWnd = CreateWindowW(szWindowClass, szTitle, WS_SYSMENU | WS_VISIBLE,
 		0, 0, 800, 600, NULL, NULL, hInstance, NULL);
 	DWORD Style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS;
 	HWND View1 = CreateWindowW(szWindowClass,szTitle, Style, 0, 0, 800, 600, hWnd, NULL, hInstance, NULL);
@@ -157,11 +159,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	case WM_DESTROY:
+		client.ShutDown();
 		PostQuitMessage(0);
 		break;
+	case WM_USER:
+
+		switch (lParam)
+		{
+
+		case FD_READ:
+
+			client.ReceiveInfo();
+
+			break;
+		}
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
+
 	return 0;
 }
 

@@ -4,6 +4,7 @@
 #include "framework.h"
 #include "Serveur.h"
 #include "ServerSocket.h"
+#include <string>
 #define MAX_LOADSTRING 100
 
 // Variables globales :
@@ -172,9 +173,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         switch (lParam)
         {
         case FD_ACCEPT:
-
             tempClientSocket = INVALID_SOCKET;
-            servSock.ClientSocket.push_back(tempClientSocket);
+            servSock.ClientSocket.insert({servSock.players,tempClientSocket});
             servSock.ClientSocket[servSock.players] = accept(servSock.ListenSocket, NULL, NULL);
             if (servSock.ClientSocket[servSock.players] == INVALID_SOCKET) {
                 printf("accept failed: %d\n", WSAGetLastError());
@@ -182,11 +182,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 WSACleanup();
                 break;
             }
-            //servSock.SendInfo(servSock.ClientSocket[servSock.players], (const char*)servSock.players);
+            servSock.SendInfo(servSock.ClientSocket[servSock.players], std::to_string(servSock.players).c_str());
             servSock.players++;
             break;
         case FD_CLOSE:
             servSock.players--;
+            break;
+        case FD_READ:
+
             break;
         }
     default:

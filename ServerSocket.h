@@ -6,8 +6,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <winsock2.h>
-#include <vector>
-
+#include <map>
 
 class ServerSocket {
 	public:
@@ -16,9 +15,11 @@ class ServerSocket {
 		SOCKET ListenSocket = INVALID_SOCKET;
 		void ReceiveInfo(SOCKET ClientSocket);
 		void SendInfo(SOCKET clientSocket, const char* sendBuf);
-		int players = 0;
-		int actualPlayer = 0;
-		std::vector<SOCKET> ClientSocket = {};
+		int players = 1;
+		int actualPlayer = 1;
+		void changeKey();
+		std::map<int,SOCKET> ClientSocket = {};
+		int indexToRemove;
 	private:
 		int iResult;
 		WSADATA wsaData;
