@@ -30,7 +30,11 @@
     <ClInclude Include="Game.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
     <ClInclude Include="Players.h">
+=======
+    <ClInclude Include="Menu.h">
+>>>>>>> Stashed changes
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -44,7 +48,14 @@
     <ClCompile Include="Main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
     <ClCompile Include="Players.cpp">
+=======
+    <ClCompile Include="Menu.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Temporaire.cpp">
+>>>>>>> Stashed changes
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
