@@ -142,11 +142,8 @@
     <ClInclude Include="Client.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Game.h" />
-<<<<<<< Updated upstream
     <ClInclude Include="Players.h" />
-=======
     <ClInclude Include="Menu.h" />
->>>>>>> Stashed changes
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -154,12 +151,9 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
-<<<<<<< Updated upstream
     <ClCompile Include="Players.cpp" />
-=======
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Temporaire.cpp" />
->>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Client.rc" />
