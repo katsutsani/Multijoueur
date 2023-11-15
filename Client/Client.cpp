@@ -45,7 +45,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	MSG msg;
 	Game game;
 	// Boucle de messages principale :
-	//WSAAsyncSelect(client.ConnectSocket, hWnd, WM_USER, FD_WRITE);
+	WSAAsyncSelect(client.ConnectSocket, hWnd, WM_USER, FD_READ | FD_WRITE);
 
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{

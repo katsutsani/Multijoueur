@@ -38,8 +38,6 @@ ClientSocket::ClientSocket(HWND hWnd) {
 		return;
 	}
 
-	WSAAsyncSelect(ConnectSocket, hWnd, WM_USER, FD_READ| FD_WRITE);
-
 	if (ConnectSocket == INVALID_SOCKET) {
 		std::cout << ("Unable to connect to server!\n");
 		WSACleanup();
@@ -81,7 +79,6 @@ void ClientSocket::ReceiveInfo()
 {
 	char recvbuf[512];
 
-	int iResult;
 	do {
 		iResult = recv(ConnectSocket, recvbuf, 512, 0);
 		if (iResult > 0) {
