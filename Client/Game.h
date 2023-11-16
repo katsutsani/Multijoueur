@@ -6,9 +6,6 @@
 #include "Players.h"
 
 const int _SIZE = 3;
-const int WINDOW_SIZE = 300;
-
-enum class Player { None, Cross, Circle };
 
 class Game
 {
