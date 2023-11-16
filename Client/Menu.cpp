@@ -2,7 +2,7 @@
 
 Menu::Menu()
 {
-	if (!font.loadFromFile("font/PKMN RBYGSC.ttf")) {
+	if (!font.loadFromFile("WindlassExtended.ttf")) {
 		std::cout << "error";
 	}
 

@@ -1,4 +1,4 @@
-#include "Game.h"
+/*#include "Game.h"
 #include "Menu.h"
 #include <iostream>
 #include <SFML/Graphics.hpp>
@@ -74,4 +74,4 @@ int main()
     }
 
     return 0;
-}
+}*/

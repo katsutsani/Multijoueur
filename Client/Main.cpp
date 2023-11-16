@@ -42,13 +42,14 @@ int WinMain() {
                     int x = mainMenu.MenuPressed();
                     if (x == 0)
                     {
-                        sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE, GRID_SIZE), "Tic Tac Toe");
+                        window.close();
+                        sf::RenderWindow Gamewindow(sf::VideoMode(WINDOW_SIZE, GRID_SIZE), "Tic Tac Toe");
 
                         Game game;
 
-                        while (window.isOpen()) {
-                            game.Update(window);
-                            game.Render(window);
+                        while (Gamewindow.isOpen()) {
+                            game.Update(Gamewindow);
+                            game.Render(Gamewindow);
                         }
                     }
 
