@@ -9,13 +9,14 @@
 
 class ClientSocket {
 public:
-	ClientSocket(HWND hWnd);
+	ClientSocket();
 	~ClientSocket();
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	void SendInfo(const char* sendbuf);
 	void ShutDown();
 	void ReceiveInfo();
 private:
+	int index;
 	int iResult;
 	WSADATA wsaData;
 

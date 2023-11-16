@@ -14,6 +14,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre 
 ServerSocket servSock;
 HWND hWnd;
 SOCKET tempClientSocket;
+std::string tempString;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -44,7 +45,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SERVEUR));
 
     MSG msg;
-    WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT | FD_CLOSE);
+    WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ | FD_WRITE);
 
     // Boucle de messages principale :
     while (GetMessage(&msg, nullptr, 0, 0))
@@ -56,14 +57,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 closesocket(servSock.ListenSocket);
                 WSACleanup();
             }
-            
-            //// Accept a client socket
-            //if (players != 2) {
-            //    players++;
-            //}
+            if (servSock.players >= 2) {
+                for (size_t i = 0; i < servSock.ClientSocket.size(); i++)
+                {
+                    servSock.SendInfo(servSock.ClientSocket[i], "P");
+                }
+            }
 
-            //servSock.ReceiveInfo(ClientSocket[actualPlayer]);
-            
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
@@ -182,14 +182,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 WSACleanup();
                 break;
             }
-            servSock.SendInfo(servSock.ClientSocket[servSock.players], std::to_string(servSock.players).c_str());
+            tempString = std::to_string(servSock.players);
+            servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
             servSock.players++;
             break;
         case FD_CLOSE:
             servSock.players--;
             break;
         case FD_READ:
-
+            servSock.ReceiveInfo();
+            break;
+        case FD_WRITE:
+            //servSock.SendInfo();
             break;
         }
     default:

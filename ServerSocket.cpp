@@ -44,23 +44,27 @@ ServerSocket::~ServerSocket()
 {
 }
 
-void ServerSocket::ReceiveInfo(SOCKET ClientSocket)
+void ServerSocket::ReceiveInfo()
 {
 	char recvbuf[512];
 	do {
-		iResult = recv(ClientSocket, recvbuf, 512, 0);
-		if (iResult > 0) {
-			std::cout << "Bytes received: %d\n", iResult;
+		for (size_t i = 0; i < ClientSocket.size(); i++)
+		{
+			iResult = recv(ClientSocket[i], recvbuf, 512, 0);
+			if (iResult > 0) {
+				std::cout << "Bytes received: %d\n", iResult;
+			}
+			else if (iResult == 0) {
+				std::cout << "Closing Connection %d\n";
+			}
+			else {
+				std::cout << "receive failed: %d\n", WSAGetLastError();
+				closesocket(ClientSocket[i]);
+				WSACleanup();
+				return;
+			}
 		}
-		else if (iResult == 0) {
-			std::cout << "Closing Connection %d\n";
-		}
-		else {
-			std::cout << "receive failed: %d\n", WSAGetLastError();
-			closesocket(ClientSocket);
-			WSACleanup();
-			return;
-		}
+		
 	} while (iResult < 0);
 }
 

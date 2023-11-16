@@ -1,6 +1,5 @@
 // Client.cpp : Définit le point d'entrée de l'application.
 
-
 #include "Client.h"
 #include "ClientSocket.h"
 #include "Game.h"
@@ -12,7 +11,7 @@ WCHAR szTitle[MAX_LOADSTRING];                  // Texte de la barre de titre
 WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre principale
 HWND hWnd;
 sf::RenderWindow SFMLView1;
-ClientSocket client(hWnd);
+ClientSocket client;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -170,7 +169,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		case FD_WRITE:
 
-			client.ReceiveInfo();
+			//client.SendInfo();
 
 			break;
 		case FD_READ:

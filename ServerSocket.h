@@ -13,7 +13,7 @@ class ServerSocket {
 		ServerSocket();
 		~ServerSocket();
 		SOCKET ListenSocket = INVALID_SOCKET;
-		void ReceiveInfo(SOCKET ClientSocket);
+		void ReceiveInfo();
 		void SendInfo(SOCKET clientSocket, const char* sendBuf);
 		int players = 1;
 		int actualPlayer = 1;

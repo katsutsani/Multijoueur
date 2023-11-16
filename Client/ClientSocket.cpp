@@ -1,8 +1,9 @@
 #include "ClientSocket.h"
+#include <string>
 #define DEFAULT_PORT 05213
 struct sockaddr_in hints;
 
-ClientSocket::ClientSocket(HWND hWnd) {
+ClientSocket::ClientSocket() {
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
 		std::cout << ("WSAStartup failed: %d\n", iResult);
@@ -78,10 +79,23 @@ void ClientSocket::ShutDown()
 void ClientSocket::ReceiveInfo()
 {
 	char recvbuf[512];
-
+	int lenght = 0;
 	do {
 		iResult = recv(ConnectSocket, recvbuf, 512, 0);
 		if (iResult > 0) {
+
+			for (size_t i = 0; i < 512; i++)
+			{
+				if (recvbuf[i] != 'i') {
+					lenght++;
+				}
+			};
+			if (recvbuf == "P") {
+				SendInfo("test");
+			}
+			else {
+				index = (int)recvbuf[lenght];
+			}
 			std::cout << "Bytes received: %d\n", iResult;
 		}
 		else if (iResult == 0) {
