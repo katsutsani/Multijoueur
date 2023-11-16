@@ -15,7 +15,7 @@ ClientSocket::ClientSocket() {
 	hints.sin_family = AF_INET;
 	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.1.1.61", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "10.1.170.51", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -30,26 +30,30 @@ ClientSocket::ClientSocket() {
 		WSACleanup();
 		return;
 	}
+}
+
+ClientSocket::~ClientSocket()
+{
+}
+
+void ClientSocket::connectToServ(HWND hWnd) {
+
+	WSAAsyncSelect(ConnectSocket, hWnd, WM_USER, FD_READ | FD_CONNECT);
 
 	iResult = connect(ConnectSocket, (struct sockaddr*)&hints, sizeof(hints));
-	if (iResult == SOCKET_ERROR) {
-		std::cout << ("connect failed with error: %d\n", WSAGetLastError());
-		closesocket(ConnectSocket);
-		ConnectSocket = INVALID_SOCKET;
+	//if (iResult == SOCKET_ERROR) {
+	//	std::cout << ("connect failed with error: %d\n", WSAGetLastError());
+	//	closesocket(ConnectSocket);
+	//	ConnectSocket = INVALID_SOCKET;
 
-		return;
-	}
+	//	return;
+	//}
 
 	if (ConnectSocket == INVALID_SOCKET) {
 		std::cout << ("Unable to connect to server!\n");
 		WSACleanup();
 		return;
 	}
-
-}
-
-ClientSocket::~ClientSocket()
-{
 }
 
 void ClientSocket::SendInfo(const char* sendbuf)
@@ -87,11 +91,11 @@ void ClientSocket::ReceiveInfo()
 				std::string tempString = "i'm Player" + std::to_string(index);
 				SendInfo(tempString.c_str());
 			}
-			else if (recvbuf[0] == 'S') {
-				SendInfo("i'm Spectator");
-			}
 			else {
 				index << recvbuf[0];
+				if (recvbuf[1] == 'S') {
+					SendInfo("i'm Spectator");
+				}
 			}
 			std::cout << "Bytes received: %d\n", iResult;
 		}

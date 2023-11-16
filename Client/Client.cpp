@@ -40,11 +40,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
-
+	client.connectToServ(hWnd);
 	MSG msg;
 	Game game;
 	// Boucle de messages principale :
-	WSAAsyncSelect(client.ConnectSocket, hWnd, WM_USER, FD_READ | FD_WRITE);
+	WSAAsyncSelect(client.ConnectSocket, hWnd, WM_USER, FD_READ | FD_CONNECT);
 
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
@@ -173,6 +173,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case FD_READ:
 
 			client.ReceiveInfo();
+
+			break;
+		case FD_CONNECT:
+
+			printf("test");
 
 			break;
 		}

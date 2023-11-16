@@ -46,7 +46,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SERVEUR));
 
 	MSG msg;
-	WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ | FD_WRITE);
+	WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ);
 
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
@@ -185,11 +185,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				WSACleanup();
 				break;
 			}
-			tempString = std::to_string(servSock.players);
-			servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
 			if (isPlaying) {
-				servSock.SendInfo(servSock.ClientSocket[servSock.players], "S");
+				tempString = std::to_string(servSock.players) + "S";
 			}
+			else {
+				tempString = std::to_string(servSock.players);
+
+			}
+			servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
 			servSock.players++;
 			break;
 		case FD_CLOSE:

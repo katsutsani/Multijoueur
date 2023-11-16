@@ -15,6 +15,7 @@ public:
 	void SendInfo(const char* sendbuf);
 	void ShutDown();
 	void ReceiveInfo();
+	void connectToServ(HWND hWnd);
 private:
 	int index;
 	int iResult;
