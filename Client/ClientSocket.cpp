@@ -87,15 +87,13 @@ void ClientSocket::ReceiveInfo()
 	do {
 		iResult = recv(ConnectSocket, recvbuf, 512, 0);
 		if (iResult > 0) {
-			if (recvbuf[0] == 'P') {
-				std::string tempString = "i'm Player" + std::to_string(index);
-				SendInfo(tempString.c_str());
+			index << recvbuf[0];
+			if (recvbuf[1] == 'S') {
+				SendInfo("i'm Spectator");
 			}
-			else {
-				index << recvbuf[0];
-				if (recvbuf[1] == 'S') {
-					SendInfo("i'm Spectator");
-				}
+			else if (recvbuf[1] == 'P') {
+				std::string tempString = "I'm player " + index;
+				SendInfo(tempString.c_str());
 			}
 			std::cout << "Bytes received: %d\n", iResult;
 		}

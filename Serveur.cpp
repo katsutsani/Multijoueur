@@ -59,13 +59,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 				WSACleanup();
 			}
 
-			if (servSock.players == 2 && !isPlaying) {
-				for (size_t i = 0; i < servSock.players; i++)
-				{
-					servSock.SendInfo(servSock.ClientSocket[i], "P");
-				}
-				isPlaying = !isPlaying;
-			}
+			//if (servSock.players == 2 && !isPlaying) {
+			//	for (size_t i = 0; i < servSock.players; i++)
+			//	{
+			//		servSock.SendInfo(servSock.ClientSocket[i], "P");
+			//	}
+			//	isPlaying = !isPlaying;
+			//}
 
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -185,11 +185,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				WSACleanup();
 				break;
 			}
-			if (isPlaying) {
+			if (servSock.players >= 2) {
 				tempString = std::to_string(servSock.players) + "S";
 			}
 			else {
-				tempString = std::to_string(servSock.players);
+				tempString = std::to_string(servSock.players) + "P";
 
 			}
 			servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
@@ -200,9 +200,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case FD_READ:
 			servSock.ReceiveInfo();
-			break;
-		case FD_WRITE:
-
 			break;
 		}
 	default:
