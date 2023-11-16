@@ -58,11 +58,14 @@ void ServerSocket::ReceiveInfo()
 				std::cout << "Closing Connection %d\n";
 			}
 			else {
-				std::cout << "receive failed: %d\n", WSAGetLastError();
-				closesocket(ClientSocket[i]);
-				WSACleanup();
-				return;
+				continue;
 			}
+			//else {
+			//	std::cout << "receive failed: %d\n", WSAGetLastError();
+			//	closesocket(ClientSocket[i]);
+			//	WSACleanup();
+			//	return;
+			//}
 		}
 		
 	} while (iResult < 0);
