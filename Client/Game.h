@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <ctime>
 
+#include "Players.h"
+
 const int _SIZE = 3;
 const int WINDOW_SIZE = 300;
 
