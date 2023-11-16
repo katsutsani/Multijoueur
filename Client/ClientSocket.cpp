@@ -92,7 +92,7 @@ void ClientSocket::ReceiveInfo()
 				SendInfo("i'm Spectator");
 			}
 			else if (recvbuf[1] == 'P') {
-				std::string tempString = "I'm player " + index;
+				std::string tempString = "I'm player " + std::to_string(index);
 				SendInfo(tempString.c_str());
 			}
 			std::cout << "Bytes received: %d\n", iResult;
