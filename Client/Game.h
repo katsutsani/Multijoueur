@@ -1,11 +1,12 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "framework.h"
 #include <cstdlib>
 #include <ctime>
-#include <iostream>
-#include "Players.h"
 
-const int SIZE = 3;
+const int _SIZE = 3;
+const int WINDOW_SIZE = 300;
+
+enum class Player { None, Cross, Circle };
 
 class Game
 {
@@ -24,9 +25,9 @@ public:
 	void DisplayWinner();
 
 	Player currentPlayer;
+	Player board[_SIZE][_SIZE];
 
 private:
-	Player board[SIZE][SIZE];
 	bool end = false;
 	Players players;
 
