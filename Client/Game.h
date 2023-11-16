@@ -3,7 +3,12 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+
 #include "Players.h"
+
+#include <fstream>
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 const int SIZE = 3;
 

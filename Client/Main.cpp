@@ -5,6 +5,19 @@ int WinMain() {
 
     Game game;
 
+    std::ifstream j("test.json");
+    json data = json::parse(j);
+
+    
+
+    json jsonfile;
+    int victory = data["emile"]["victory"];
+    victory++;
+    jsonfile["emile"]["victory"] = victory;
+
+    std::ofstream f("test.json");
+    f << jsonfile;
+
     while (window.isOpen()) {
         game.Update(window);
         game.Render(window);
