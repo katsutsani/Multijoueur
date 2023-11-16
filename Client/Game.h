@@ -24,9 +24,11 @@ public:
 	void CheckWinner();
 	void DisplayWinner();
 
-private:
 	Player currentPlayer;
 	Player board[_SIZE][_SIZE];
+
+private:
 	bool end = false;
+	Players players;
 
 };

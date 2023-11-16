@@ -1,13 +1,16 @@
-#include "Game.h"
+/*#include "Game.h"
 #include "Menu.h"
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
 
-int WinMain() {
-    RenderWindow window(sf::VideoMode(960, 960), "Main Menu", Style::Default);
-    Menu mainMenu;
+
+
+int main()
+{
+   RenderWindow window(sf::VideoMode(960, 960), "Main Menu", Style::Default);
+   Menu mainMenu;
 
 
     while (window.isOpen())
@@ -42,20 +45,19 @@ int WinMain() {
                     int x = mainMenu.MenuPressed();
                     if (x == 0)
                     {
-                        window.close();
-                        sf::RenderWindow Gamewindow(sf::VideoMode(WINDOW_SIZE, GRID_SIZE), "Tic Tac Toe");
+                        sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE, GRID_SIZE), "Tic Tac Toe");
 
                         Game game;
 
-                        while (Gamewindow.isOpen()) {
-                            game.Update(Gamewindow);
-                            game.Render(Gamewindow);
+                        while (window.isOpen()) {
+                            game.Update(window);
+                            game.Render(window);
                         }
                     }
 
                     if (x == 1)
                     {
-
+                        
                     }
                     if (x == 2)
                     {
@@ -72,4 +74,4 @@ int WinMain() {
     }
 
     return 0;
-}
+}*/
