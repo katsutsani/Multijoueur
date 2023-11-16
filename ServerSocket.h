@@ -15,8 +15,8 @@ class ServerSocket {
 		SOCKET ListenSocket = INVALID_SOCKET;
 		void ReceiveInfo();
 		void SendInfo(SOCKET clientSocket, const char* sendBuf);
-		int players = 1;
-		int actualPlayer = 1;
+		int players = 0;
+		int actualPlayer = 0;
 		void changeKey();
 		std::map<int,SOCKET> ClientSocket = {};
 		int indexToRemove;

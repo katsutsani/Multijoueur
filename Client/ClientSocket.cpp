@@ -1,6 +1,7 @@
 #include "ClientSocket.h"
 #include <string>
 #define DEFAULT_PORT 05213
+#include <cstdio>
 struct sockaddr_in hints;
 
 ClientSocket::ClientSocket() {
@@ -14,7 +15,7 @@ ClientSocket::ClientSocket() {
 	hints.sin_family = AF_INET;
 	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.1.1.61", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "10.1.170.51", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -79,22 +80,18 @@ void ClientSocket::ShutDown()
 void ClientSocket::ReceiveInfo()
 {
 	char recvbuf[512];
-	int lenght = 0;
 	do {
 		iResult = recv(ConnectSocket, recvbuf, 512, 0);
 		if (iResult > 0) {
-
-			for (size_t i = 0; i < 512; i++)
-			{
-				if (recvbuf[i] != 'i') {
-					lenght++;
-				}
-			};
-			if (recvbuf == "P") {
-				SendInfo("test");
+			if (recvbuf[0] == 'P') {
+				std::string tempString = "i'm Player" + std::to_string(index);
+				SendInfo(tempString.c_str());
+			}
+			else if (recvbuf[0] == 'S') {
+				SendInfo("i'm Spectator");
 			}
 			else {
-				index = (int)recvbuf[lenght];
+				index << recvbuf[0];
 			}
 			std::cout << "Bytes received: %d\n", iResult;
 		}
