@@ -149,7 +149,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\JSON.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientSocket.cpp" />
     <ClCompile Include="Game.cpp" />

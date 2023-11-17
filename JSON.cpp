@@ -16,19 +16,24 @@ std::ofstream gamej("game.json");
 
 /*=========================*/
 
-int JSON::GetVictory()
+int JSON::GetVictory(std::string player)
 {
-    return 0;
+    return GetPlayer(player)["victory"];
 }
 
-json JSON::GetPlayer()
+json JSON::GetPlayer(std::string player)
 {
-    return json();
+    return dataPlayer[player];
 }
 
-json JSON::UpdateJson()
+void JSON::UpdatePlayerJson()
 {
-    return json();
+    playerj << dataPlayer;
+}
+
+void JSON::UpdateGameJson()
+{
+    gamej << dataGame;
 }
 
 char JSON::GetPos()

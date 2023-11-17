@@ -10,9 +10,10 @@ class JSON
 {
 public:
 
-	int GetVictory();
-	json GetPlayer();
-	json UpdateJson();
+	int GetVictory(std::string player);
+	json GetPlayer(std::string player);
+	void UpdatePlayerJson();
+	void UpdateGameJson();
 	char GetPos();
 
 
