@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <fstream>
+#include <nlohmann/json.hpp>
 #include "targetver.h"
 #define WIN32_LEAN_AND_MEAN             // Exclure les en-têtes Windows rarement utilisés
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
@@ -14,3 +16,4 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+
