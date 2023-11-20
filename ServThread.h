@@ -1,18 +1,20 @@
 #pragma once
 #include "framework.h"
 #include "ServerSocket.h"
+#include <string>
 
 class Threads {
 public:
 	Threads();
 	~Threads();
 	bool createServerThread();
-	DWORD WINAPI ThreadProc(LPVOID* lpParameters);
 	bool Close();
-
+	ServerSocket GetSock();
 private:
-	ServerSocket servSock;
+
+	ServerSocket m_servSock;
 	SOCKET tempClientSocket;
 	std::string tempString;
-	LPCRITICAL_SECTION m_cs;
+	LPDWORD   dwThreadIdArray[3];
+	HANDLE  hThreadArray[3];
 };

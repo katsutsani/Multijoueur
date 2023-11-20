@@ -4,7 +4,7 @@
 #include "framework.h"
 #include "Serveur.h"
 #include "ServerSocket.h"
-#include "multi-threading.h"
+#include "ServThread.h"
 #include <string>
 
 #define MAX_LOADSTRING 100
@@ -13,11 +13,12 @@
 HINSTANCE hInst;                                // instance actuelle
 WCHAR szTitle[MAX_LOADSTRING];                  // Texte de la barre de titre
 WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre principale
-ServerSocket servSock;
 HWND hWnd;
 bool isPlaying = false;
 SOCKET tempClientSocket;
 std::string tempString;
+
+
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -46,29 +47,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SERVEUR));
-
 	MSG msg;
-	WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ);
-	Threads multiThreads;
+	Threads servThread;
 
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 		{
-			if (listen(servSock.ListenSocket, SOMAXCONN) == SOCKET_ERROR) {
-				printf("listen failed with error: %ld\n", WSAGetLastError());
-				closesocket(servSock.ListenSocket);
-				WSACleanup();
-			}
-
-			//if (servSock.players == 2 && !isPlaying) {
-			//	for (size_t i = 0; i < servSock.players; i++)
-			//	{
-			//		servSock.SendInfo(servSock.ClientSocket[i], "P");
-			//	}
-			//	isPlaying = !isPlaying;
-			//}
 
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -176,35 +162,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	case WM_USER:
-		switch (lParam)
-		{
-		case FD_ACCEPT:
-			tempClientSocket = INVALID_SOCKET;
-			servSock.ClientSocket.insert({ servSock.players,tempClientSocket });
-			servSock.ClientSocket[servSock.players] = accept(servSock.ListenSocket, NULL, NULL);
-			if (servSock.ClientSocket[servSock.players] == INVALID_SOCKET) {
-				printf("accept failed: %d\n", WSAGetLastError());
-				closesocket(servSock.ListenSocket);
-				WSACleanup();
-				break;
-			}
-			if (servSock.players >= 2) {
-				tempString = std::to_string(servSock.players) + "S";
-			}
-			else {
-				tempString = std::to_string(servSock.players) + "P";
+		//switch (lParam)
+		//{
+		//case FD_ACCEPT:
+		//	tempClientSocket = INVALID_SOCKET;
+		//	servSock.ClientSocket.insert({ servSock.players,tempClientSocket });
+		//	servSock.ClientSocket[servSock.players] = accept(servSock.ListenSocket, NULL, NULL);
+		//	if (servSock.ClientSocket[servSock.players] == INVALID_SOCKET) {
+		//		printf("accept failed: %d\n", WSAGetLastError());
+		//		closesocket(servSock.ListenSocket);
+		//		WSACleanup();
+		//		break;
+		//	}
+		//	if (servSock.players >= 2) {
+		//		tempString = std::to_string(servSock.players) + "S";
+		//	}
+		//	else {
+		//		tempString = std::to_string(servSock.players) + "P";
 
-			}
-			servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
-			servSock.players++;
-			break;
-		case FD_CLOSE:
-			servSock.players--;
-			break;
-		case FD_READ:
-			servSock.ReceiveInfo();
-			break;
-		}
+		//	}
+		//	servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
+		//	servSock.players++;
+		//	break;
+		//case FD_CLOSE:
+		//	servSock.players--;
+		//	break;
+		//case FD_READ:
+		//	servSock.ReceiveInfo();
+		//	break;
+		//}
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
