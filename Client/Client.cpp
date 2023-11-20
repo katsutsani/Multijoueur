@@ -3,6 +3,7 @@
 #include "Client.h"
 #include "ClientSocket.h"
 #include "Game.h"
+#include "MenuWindow.h"
 #define MAX_LOADSTRING 100
 
 // Variables globales :
@@ -12,6 +13,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre 
 HWND hWnd;
 sf::RenderWindow SFMLView1;
 ClientSocket client;
+MenuWindow menu;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -42,7 +44,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 	client.connectToServ(hWnd);
 	MSG msg;
-	Game game;
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
@@ -52,8 +53,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		game.Update(SFMLView1);
-		game.Render(SFMLView1);
+		menu.Update(SFMLView1);
+		menu.Render(SFMLView1);
 	}
 
 	return (int)msg.wParam;
@@ -102,9 +103,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	hInst = hInstance; // Stocke le handle d'instance dans la variable globale
 
 	hWnd = CreateWindowW(szWindowClass, szTitle, WS_SYSMENU | WS_VISIBLE,
-		0, 0, 800, 600, NULL, NULL, hInstance, NULL);
+		0, 0, WINDOW_SIZE + 15, GRID_SIZE + 39, NULL, NULL, hInstance, NULL);
 	DWORD Style = WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS;
-	HWND View1 = CreateWindowW(szWindowClass,szTitle, Style, 0, 0, 800, 600, hWnd, NULL, hInstance, NULL);
+	HWND View1 = CreateWindowW(szWindowClass,szTitle, Style, 0, 0, WINDOW_SIZE, GRID_SIZE, hWnd, NULL, hInstance, NULL);
 	if (!hWnd)
 	{
 		return FALSE;
@@ -155,6 +156,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		// TODO: Ajoutez ici le code de dessin qui utilise hdc...
 		EndPaint(hWnd, &ps);
 	}
+	break;
+	case WM_KEYDOWN:
+		switch (wParam) {
+		case VK_UP:
+			menu.MoveUp();
+			break;
+		case VK_DOWN:
+			menu.MoveDown();
+			break;
+		case VK_RETURN:
+			menu.Enter();
+			break;
+		}
 	break;
 	case WM_DESTROY:
 		client.ShutDown();

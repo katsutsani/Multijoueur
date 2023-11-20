@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
-using namespace sf;
+#include "Players.h"
 
 #define Max_menu 3
 
@@ -23,7 +23,7 @@ public:
 private:
 
 	int MenuSelected;
-	Font font;
-	Text menu[Max_menu];
+	sf::Font font;
+	sf::Text menu[Max_menu];
 
 };

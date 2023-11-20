@@ -30,10 +30,10 @@ void Game::HandleInput(sf::RenderWindow& window)
 void Game::HandleMouseClick(sf::RenderWindow& window)
 {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    int col = mousePos.x / (WINDOW_SIZE / _SIZE);
-    int row = mousePos.y / (WINDOW_SIZE / _SIZE);
+    int col = (mousePos.x - INFO_SIZE) / (GRID_SIZE / _SIZE);
+    int row = mousePos.y / (GRID_SIZE / _SIZE);
 
-    if (col >= 0 && col < _SIZE && row >= 0 && row < _SIZE && board[row][col] == Player::None) {
+    if (col >= 0 && col < _SIZE && row >= 0 && row < _SIZE && board[row][col] == Player::None && mousePos.x > INFO_SIZE) {
         board[row][col] = currentPlayer;
         CheckWinner();
         if (end == false)
@@ -95,14 +95,14 @@ void Game::Render(sf::RenderWindow& window)
 
     for (int i = 1; i < _SIZE; ++i) {
         sf::Vertex line[] = {
-            sf::Vector2f(i * WINDOW_SIZE / _SIZE, 0),
-            sf::Vector2f(i * WINDOW_SIZE / _SIZE, WINDOW_SIZE)
+            sf::Vector2f(i * GRID_SIZE / _SIZE + INFO_SIZE, 0),
+            sf::Vector2f(i * GRID_SIZE / _SIZE + INFO_SIZE, GRID_SIZE)
         };
         window.draw(line, 2, sf::Lines);
 
         sf::Vertex line2[] = {
-            sf::Vector2f(0, i * WINDOW_SIZE / _SIZE),
-            sf::Vector2f(WINDOW_SIZE, i * WINDOW_SIZE / _SIZE)
+            sf::Vector2f(INFO_SIZE, i * GRID_SIZE / _SIZE),
+            sf::Vector2f(WINDOW_SIZE, i * GRID_SIZE / _SIZE)
         };
         window.draw(line2, 2, sf::Lines);
     }
@@ -126,10 +126,10 @@ void Game::Render(sf::RenderWindow& window)
 void Game::DrawPlayer1(sf::RenderWindow& window, int row, int col)
 {
     sf::VertexArray cross(sf::Lines, 4);
-    cross[0].position = sf::Vector2f(col * WINDOW_SIZE / _SIZE, row * WINDOW_SIZE / _SIZE);
-    cross[1].position = sf::Vector2f((col + 1) * WINDOW_SIZE / _SIZE, (row + 1) * WINDOW_SIZE / _SIZE);
-    cross[2].position = sf::Vector2f((col + 1) * WINDOW_SIZE / _SIZE, row * WINDOW_SIZE / _SIZE);
-    cross[3].position = sf::Vector2f(col * WINDOW_SIZE / _SIZE, (row + 1) * WINDOW_SIZE / _SIZE);
+    cross[0].position = sf::Vector2f(col * GRID_SIZE / _SIZE + INFO_SIZE, row * GRID_SIZE / _SIZE);
+    cross[1].position = sf::Vector2f((col + 1) * GRID_SIZE / _SIZE + INFO_SIZE, (row + 1) * GRID_SIZE / _SIZE);
+    cross[2].position = sf::Vector2f((col + 1) * GRID_SIZE / _SIZE + INFO_SIZE, row * GRID_SIZE / _SIZE);
+    cross[3].position = sf::Vector2f(col * GRID_SIZE / _SIZE + INFO_SIZE, (row + 1) * GRID_SIZE / _SIZE);
 
     for (int i = 0; i < 4; ++i) {
         cross[i].color = sf::Color::Red;
@@ -140,8 +140,8 @@ void Game::DrawPlayer1(sf::RenderWindow& window, int row, int col)
 
 void Game::DrawPlayer2(sf::RenderWindow& window, int row, int col)
 {
-    sf::CircleShape circle(WINDOW_SIZE / _SIZE / 2 - 5);
-    circle.setPosition(col * WINDOW_SIZE / _SIZE, row * WINDOW_SIZE / _SIZE);
+    sf::CircleShape circle(GRID_SIZE / _SIZE / 2 - 5);
+    circle.setPosition(col * GRID_SIZE / _SIZE + INFO_SIZE, row * GRID_SIZE / _SIZE);
     circle.setFillColor(sf::Color::Blue);
     circle.setOutlineThickness(5);
     circle.setOutlineColor(sf::Color::Blue);
