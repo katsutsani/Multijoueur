@@ -30,12 +30,18 @@
     <ClInclude Include="ServerSocket.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="multi-threading.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Serveur.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="ServerSocket.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="multi-threading.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

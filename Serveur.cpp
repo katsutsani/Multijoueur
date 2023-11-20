@@ -4,7 +4,9 @@
 #include "framework.h"
 #include "Serveur.h"
 #include "ServerSocket.h"
+#include "multi-threading.h"
 #include <string>
+
 #define MAX_LOADSTRING 100
 
 // Variables globales :
@@ -47,6 +49,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	MSG msg;
 	WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ);
+	Threads multiThreads;
 
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
