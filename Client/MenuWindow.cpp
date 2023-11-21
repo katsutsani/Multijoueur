@@ -23,6 +23,19 @@ MenuWindow::MenuWindow() {
     menu[2].setString("Exit");
     menu[2].setCharacterSize(70);
     menu[2].setPosition(WINDOW_SIZE / 2, 5 * (GRID_SIZE / 7));
+
+    name.setFont(font);
+    name.setFillColor(sf::Color::White);
+    name.setString("Enter a name :");
+    name.setCharacterSize(70);
+    name.setPosition(WINDOW_SIZE / 4, GRID_SIZE / 3);
+
+    nameEntered.setFont(font);
+    nameEntered.setFillColor(sf::Color::White);
+    nameEntered.setString("");
+    nameEntered.setCharacterSize(70);
+    nameEntered.setPosition(WINDOW_SIZE / 4, 2 * GRID_SIZE / 3);
+
 }
 
 void MenuWindow::HandleInput(sf::RenderWindow& window)
@@ -72,9 +85,16 @@ void MenuWindow::Update(sf::RenderWindow& window)
 void MenuWindow::Render(sf::RenderWindow& window)
 {
     window.clear();
-        
-    for (int i = 0; i < Max_menu; ++i) {
-        window.draw(menu[i]);
+    if (isEnteringName == 0) 
+    {
+        for (int i = 0; i < Max_menu; ++i) {
+            window.draw(menu[i]);
+        }
+    }
+    else
+    {
+        window.draw(name);
+        window.draw(nameEntered);
     }
     window.display();
 }
@@ -103,4 +123,9 @@ void MenuWindow::MoveDown()
         }
         menu[MenuSelected].setFillColor(sf::Color::Yellow);
     }
+}
+
+void MenuWindow::UpdateName(std::string name)
+{
+    nameEntered.setString(name);
 }

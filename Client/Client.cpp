@@ -190,7 +190,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if (menu.isEnteringName == 1) 
 		{
 			static std::string name;
-			name.push_back((char)wParam);
+			if (wParam == VK_BACK && name.length() > 0) 
+			{
+				name.pop_back();
+			}
+			else
+			{
+				name.push_back((char)wParam);
+			}
+			menu.UpdateName(name);
 		}
 		break;
 
