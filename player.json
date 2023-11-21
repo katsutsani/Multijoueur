@@ -1,3 +1,10 @@
 {
-
+  "emile": {
+    "name": "emile",
+    "victory": 10
+  },
+  "ethan": {
+    "name": "ethan",
+    "victory": 45
+  }
 }

@@ -1,10 +1,11 @@
 // Serveur.cpp : Définit le point d'entrée de l'application.
 //
 
-#include "framework.h"
 #include "Serveur.h"
 #include "ServerSocket.h"
 #include <string>
+#include "JSON.h"
+
 #define MAX_LOADSTRING 100
 
 // Variables globales :
@@ -15,6 +16,7 @@ ServerSocket servSock;
 HWND hWnd;
 bool isPlaying = false;
 SOCKET tempClientSocket;
+JSON jsonData;
 std::string tempString;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -190,7 +192,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			else {
 				tempString = std::to_string(servSock.players) + "P";
-
+				//mettre le menu pour recup le nom puis le mettre dans jsonData.initPlayer();
 			}
 			servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
 			servSock.players++;

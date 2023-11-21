@@ -12,15 +12,16 @@ public:
 
 	int GetVictory(std::string player);
 	json GetPlayer(std::string player);
-	void UpdatePlayerJson();
-	void UpdateGameJson();
-	char GetPos();
-
+	/*void UpdatePlayerJson();
+	void UpdateGameJson();*/
+	void InitPlayer(std::string player, int id);
+	void UpdateGame(std::string posToken, std::string tokenPlayer);
+	void RestartGame();
+	void CheckPlayer(std::string player);
+	void CreatePlayer(std::string player);
 
 private:
-
-	char mPos;
-	
+	int nbPlayer = 0;
 
 };
 
