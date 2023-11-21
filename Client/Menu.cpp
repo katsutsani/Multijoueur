@@ -8,22 +8,22 @@ Menu::Menu()
 
 	//Play
 	menu[0].setFont(font);
-	menu[0].setFillColor(Color::White);
+	menu[0].setFillColor(sf::Color::White);
 	menu[0].setString("Play");
 	menu[0].setCharacterSize(70);
-	menu[0].setPosition(305, 500);
+	menu[0].setPosition(WINDOW_SIZE / 2, 3 * (GRID_SIZE / 7));
 	//Options
 	menu[1].setFont(font);
-	menu[1].setFillColor(Color::White);
+	menu[1].setFillColor(sf::Color::White);
 	menu[1].setString("Options");
 	menu[1].setCharacterSize(70);
-	menu[1].setPosition(305, 600);
+	menu[1].setPosition(WINDOW_SIZE / 2, 4 * (GRID_SIZE / 7));
 	//Exit
 	menu[2].setFont(font);
-	menu[2].setFillColor(Color::White);
+	menu[2].setFillColor(sf::Color::White);
 	menu[2].setString("Exit");
 	menu[2].setCharacterSize(70);
-	menu[2].setPosition(305, 700);
+	menu[2].setPosition(WINDOW_SIZE / 2, 5 * (GRID_SIZE / 7));
 
 	MenuSelected = 0;
 }
@@ -39,26 +39,26 @@ void Menu::draw(sf::RenderWindow& window)
 void Menu::MoveUp()
 {
 	if (MenuSelected - 1 >= -1) {
-		menu[MenuSelected].setFillColor(Color::White);
+		menu[MenuSelected].setFillColor(sf::Color::White);
 
 		MenuSelected--;
 		if (MenuSelected == -1) {
 			MenuSelected = 2;
 		}
-		menu[MenuSelected].setFillColor(Color::Yellow);
+		menu[MenuSelected].setFillColor(sf::Color::Yellow);
 	}
 }
 
 void Menu::MoveDown()
 {
 	if (MenuSelected + 1 >= 0) {
-		menu[MenuSelected].setFillColor(Color::White);
+		menu[MenuSelected].setFillColor(sf::Color::White);
 
 		MenuSelected++;
 		if (MenuSelected == 3) {
 			MenuSelected = 0;
 		}
-		menu[MenuSelected].setFillColor(Color::Yellow);
+		menu[MenuSelected].setFillColor(sf::Color::Yellow);
 	}
 }
 
