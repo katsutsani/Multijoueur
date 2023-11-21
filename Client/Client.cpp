@@ -187,10 +187,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 	break;
 	case WM_CHAR:
+		static std::string name;
 		if (menu.isEnteringName == 1) 
 		{
-			static std::string name;
 			name.push_back((char)wParam);
+		}
+		if (VK_RETURN)
+		{
+			name = "name" + name;
+			client.SendInfo(name.c_str());
 		}
 		break;
 
