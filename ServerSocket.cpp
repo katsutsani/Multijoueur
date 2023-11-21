@@ -1,6 +1,9 @@
 #include "ServerSocket.h"
+#include "JSON.h"
 #define DEFAULT_PORT 05213
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 struct sockaddr_in hints;
+JSON jsonGame;
 
 ServerSocket::ServerSocket() {
 
@@ -52,6 +55,27 @@ void ServerSocket::ReceiveInfo()
 		{
 			iResult = recv(ClientSocket[i], recvbuf, 512, 0);
 			if (iResult > 0) {
+
+				std::string checkname;
+
+				for (int i = 0; i < 4; i++)
+				{
+					checkname.push_back(recvbuf[i]);
+				}
+				if (checkname == "name")
+				{
+					checkname.clear();
+
+					for (int i = 4; i < iResult; i++)
+					{
+						checkname.push_back(recvbuf[i]);
+					}
+
+					jsonGame.CheckPlayer(checkname);
+
+					checkname.clear();
+				}
+
 				std::cout << "Bytes received: %d\n", iResult;
 			}
 			else if (iResult == 0) {

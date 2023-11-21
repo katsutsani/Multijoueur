@@ -192,7 +192,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			else {
 				tempString = std::to_string(servSock.players) + "P";
-				//mettre le menu pour recup le nom puis le mettre dans jsonData.initPlayer();
 			}
 			servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
 			servSock.players++;
