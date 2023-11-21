@@ -34,37 +34,33 @@ void MenuWindow::HandleInput(sf::RenderWindow& window)
         {
             window.close();
         }
-        if (event.type == sf::Event::KeyReleased)
-        {
-
-            if (event.key.code == sf::Keyboard::Return)
-            {
-                
-
-            }
-        }
     }
 }
 
-void MenuWindow::Enter() 
+void MenuWindow::Enter(sf::RenderWindow& window) 
 {
-    int x = MenuSelected;
-    if (x == 0)
+    if (isEnteringName == 0) 
     {
-       /* Game game;
-        while (window.isOpen()) {
-            game.Update(window);
-            game.Render(window);
-        }*/
-    }
+        int x = MenuSelected;
+        if (x == 0)
+        {
+            isEnteringName = 1;
+        }
 
-    if (x == 1)
-    {
+        if (x == 1)
+        {
 
+        }
+
+        if (x == 2)
+        {
+            isQuitting = 1;
+        }
     }
-    if (x == 2)
+    else
     {
-        /*window.close();*/
+        isEnteringName = 0;
+        isPlaying = 1;
     }
 }
 

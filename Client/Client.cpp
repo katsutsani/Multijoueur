@@ -44,6 +44,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
 	client.connectToServ(hWnd);
 	MSG msg;
+	Game game;
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
@@ -53,8 +54,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-		menu.Update(SFMLView1);
-		menu.Render(SFMLView1);
+		if (menu.isPlaying == 0) 
+		{
+			menu.Update(SFMLView1);
+			menu.Render(SFMLView1);
+		}
+		else
+		{
+			game.Update(SFMLView1);
+			game.Render(SFMLView1);
+		}
+		if (menu.isQuitting == 1)
+		{
+			client.ShutDown();
+			PostQuitMessage(0);
+			menu.isQuitting = 0;
+		}
 	}
 
 	return (int)msg.wParam;
@@ -158,7 +173,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	case WM_KEYDOWN:
-		switch (wParam) {
+		switch (wParam) 
+		{
 		case VK_UP:
 			menu.MoveUp();
 			break;
@@ -166,10 +182,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			menu.MoveDown();
 			break;
 		case VK_RETURN:
-			menu.Enter();
+			menu.Enter(SFMLView1);
 			break;
 		}
 	break;
+	case WM_CHAR:
+		if (menu.isEnteringName == 1) 
+		{
+			static std::string name;
+			name.push_back((char)wParam);
+		}
+		break;
+
 	case WM_DESTROY:
 		client.ShutDown();
 		PostQuitMessage(0);
