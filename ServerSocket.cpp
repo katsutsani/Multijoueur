@@ -1,6 +1,7 @@
 #include "ServerSocket.h"
 #define DEFAULT_PORT 05213
 struct sockaddr_in servHints;
+sockaddr_in webServerAddr;
 ServerSocket::ServerSocket() {
 
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -36,7 +37,6 @@ ServerSocket::ServerSocket() {
 		WSACleanup();
 		return;
 	}
-
 }
 
 ServerSocket::~ServerSocket()

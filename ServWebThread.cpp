@@ -3,32 +3,39 @@ CRITICAL_SECTION m_servWebCS;
 DWORD WINAPI servWebThreadProc(LPVOID lpParameters)
 {
 	ServWebThread* thread = (ServWebThread*)lpParameters;
-
-	//WSAAsyncSelect(thread->GetSock().ListenSocket, thread->GetWindow(), WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ);
+	WSAAsyncSelect(thread->GetSock().m_servWebSock, thread->_hWnd, WM_USER, FD_ACCEPT | FD_CLOSE);
 
 	InitializeCriticalSection(&m_servWebCS);
 
 	// pour bloquer un bloc d'instructions
 	EnterCriticalSection(&m_servWebCS);
+
+	std::string message = R"(
+	<html>
+		<header>
+			<meta http-equiv="refresh" content="1" />
+		</header>
+		<body>
+			<h1> Bienvenue sur le serveur de jeu </h1>
+		</body>
+	</html>)";
+
+
 	while (thread->GetSock().m_servWebSock != INVALID_SOCKET && !thread->needToExit)
 	{
-		DWORD dwWaitResult = WaitForSingleObject(thread->GetMutex(), INFINITE);
-		switch (dwWaitResult)
-		{
-		case WAIT_OBJECT_0:
-			if (!ReleaseMutex(thread->GetMutex())) {
 
-			}
-			break;
-		case WAIT_ABANDONED:
-			// pour libérer le bloc
-			LeaveCriticalSection(&m_servWebCS);
+		SOCKET clientWebSocket = accept(thread->GetSock().m_servWebSock, nullptr, nullptr);
+		if (clientWebSocket != INVALID_SOCKET) {
+			std::cout << "Web client connected!\n";
 
-			// quand c'est fini
-			DeleteCriticalSection(&m_servWebCS);
-			return 0;
-		default:
-			break;
+			// Répondre à la requête avec un message HTML
+			std::string response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
+			response += message;
+
+			send(clientWebSocket, response.c_str(), response.size(), 0);
+
+			// Fermer la connexion avec le client web
+			closesocket(clientWebSocket);
 		}
 	}
 
@@ -42,6 +49,9 @@ DWORD WINAPI servWebThreadProc(LPVOID lpParameters)
 ServWebThread::ServWebThread()
 {
 
+}
+
+bool ServWebThread::createServerWebThread(HWND hWnd) {
 	ghMutex = CreateMutex(
 		NULL,              // default security attributes
 		FALSE,             // initially not owned
@@ -50,8 +60,9 @@ ServWebThread::ServWebThread()
 	if (ghMutex == NULL)
 	{
 		printf("CreateMutex error: %d\n", GetLastError());
-		return;
+		return false;
 	}
+	_hWnd = hWnd;
 	hThread = CreateThread(
 		NULL,
 		0,
@@ -59,6 +70,7 @@ ServWebThread::ServWebThread()
 		this,
 		0,
 		dwThreadId);
+	return true;
 }
 
 ServWebThread::~ServWebThread()
@@ -75,7 +87,7 @@ void ServWebThread::Close() {
 }
 ServWebSock ServWebThread::GetSock()
 {
-	return servWebSock;
+	return m_servWebSock;
 }
 
 HANDLE ServWebThread::GetMutex()

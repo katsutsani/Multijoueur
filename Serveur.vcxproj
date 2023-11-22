@@ -140,8 +140,8 @@
     <ClInclude Include="Threads.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ServThread.cpp" />
     <ClCompile Include="ServerSocket.cpp" />
+    <ClCompile Include="ServThread.cpp" />
     <ClCompile Include="Serveur.cpp" />
     <ClCompile Include="ServWebSock.cpp" />
     <ClCompile Include="ServWebThread.cpp" />

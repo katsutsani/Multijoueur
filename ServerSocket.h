@@ -16,6 +16,7 @@ class ServerSocket {
 		void changeKey();
 		std::map<int,SOCKET> ClientSocket = {};
 		int indexToRemove;
+		SOCKET webSocket = INVALID_SOCKET;
 	private:
 		int iResult;
 		WSADATA wsaData;

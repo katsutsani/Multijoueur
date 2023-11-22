@@ -58,23 +58,7 @@ ServThread::~ServThread()
 
 void ServThread::createThread()
 {
-	ghMutex = CreateMutex(
-		NULL,              // default security attributes
-		FALSE,             // initially not owned
-		NULL);             // unnamed mutex
 
-	if (ghMutex == NULL)
-	{
-		printf("CreateMutex error: %d\n", GetLastError());
-		return;
-	}
-	hThread = CreateThread(
-		NULL,
-		0,
-		servThreadProc,
-		this,
-		0,
-		dwThreadId);
 }
 
 bool ServThread::createServerThread(HWND hWnd)

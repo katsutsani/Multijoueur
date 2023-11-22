@@ -10,9 +10,12 @@ public:
 	ServWebSock GetSock();
 	HANDLE GetMutex();
 	HANDLE GetThread();
+	bool createServerWebThread(HWND hWnd);
 	void Close();
 	bool needToExit = false;
+	HWND _hWnd;
 private:
-	ServWebSock servWebSock;
+
+	ServWebSock m_servWebSock;
 	HANDLE ghMutex;
 };

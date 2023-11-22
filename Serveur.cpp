@@ -51,6 +51,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SERVEUR));
 	MSG msg;
 	servThread.createServerThread(hWnd);
+	servWebThread.createServerWebThread(hWnd);
 	allThreads[0] = servThread.GetThread();
 	allThreads[1] = servWebThread.GetThread();
 
