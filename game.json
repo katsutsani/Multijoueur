@@ -1,0 +1,21 @@
+{
+  "player1": {
+    "name": "joueurX",
+    "victory": 0
+  },
+  "player2": {
+    "name": "joueurO",
+    "victory": 0
+  },
+  "posToken": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "B3",
+    "C1",
+    "C2",
+    "C3"
+  ]
+}

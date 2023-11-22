@@ -1,31 +1,15 @@
 #include "JSON.h"
-   
-    json dataPlayer;
-    json dataGame;
 
-    std::ifstream playerf("player.json");
-    std::ifstream gamef("game.json");
-
-    std::ofstream gamej("game.json");
-    std::ofstream playerj("player.json");
-
-/*=========================*/
 void JSON::function()
 {
+    std::ifstream playerf("player.json", std::ios::app);
+    playerf >> dataPlayer;
+    /*dataPlayer = json::parse(playerf);*/
 
-    dataGame = json::parse(gamef);
-
-    dataPlayer = json::parse(playerf);
-
-  
-
-    /*=========================*/
-
-
-
-    
+    std::ifstream gamef("game.json", std::ios::app);
+    gamef >> dataGame;
+    /*dataGame = json::parse(gamef);*/
 }
-/*=========================*/
 
 int JSON::GetVictory(std::string player)
 {
@@ -37,16 +21,6 @@ json JSON::GetPlayer(std::string player)
     return dataPlayer[player];
 }
 
-//void JSON::UpdatePlayerJson()
-//{
-//    playerj << dataPlayer;
-//}
-//
-//void JSON::UpdateGameJson()
-//{
-//    gamej << dataGame;
-//}
-
 void JSON::InitPlayer(std::string player, int idGame)
 {
     function();
@@ -57,12 +31,12 @@ void JSON::InitPlayer(std::string player, int idGame)
     name = dataPlayer[player]["name"];
     victory = dataPlayer[player]["victory"];
 
-    json jsonFile;
+    dataGame["player" + std::to_string(idGame)]["name"] = name;
+    dataGame["player" + std::to_string(idGame)]["victory"] = victory;
 
-    jsonFile["player" + std::to_string(idGame)]["name"] = name;
-    jsonFile["player" + std::to_string(idGame)]["victory"] = victory;
+    std::ofstream gamej("game.json", std::ios::trunc);
 
-    gamej << jsonFile;
+    gamej << dataGame;
 }
 
 void JSON::UpdateGame(std::string posToken, std::string tokenPlayer)
@@ -78,31 +52,32 @@ void JSON::UpdateGame(std::string posToken, std::string tokenPlayer)
         }
     }
 
-    json jsonFile;
+    dataGame["posToken"] = tab;
 
-    jsonFile["posToken"] = tab;
+    std::ofstream gamej("game.json", std::ios::trunc);
 
-    gamej << jsonFile;
+    gamej << dataGame;
 }
 
 
 void JSON::RestartGame()
 {
+
     function();
     std::string tab[9] = { "A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3" };
     std::string name1 = "joueurX";
     std::string name2 = "joueurO";
     int victory = 0;
 
-    json jsonFile;
+    dataGame["posToken"] = tab;
+    dataGame["player1"]["name"] = name1;
+    dataGame["player2"]["name"] = name2;
+    dataGame["player1"]["victory"] = victory;
+    dataGame["player2"]["victory"] = victory;
 
-    jsonFile["posToken"] = tab;
-    jsonFile["player1"]["name"] = name1;
-    jsonFile["player2"]["name"] = name2;
-    jsonFile["player1"]["victory"] = victory;
-    jsonFile["player2"]["victory"] = victory;
+    std::ofstream gamej("game.json", std::ios::trunc);
 
-    gamej << jsonFile;
+    gamej << dataGame;
 }
 
 void JSON::CheckPlayer(std::string player)
@@ -116,22 +91,26 @@ void JSON::CheckPlayer(std::string player)
     }
     else
     {
-        CreatePlayer(player);
+        if (CreatePlayer(player))
+        {
+            InitPlayer(player, nbPlayer);
+        }
     }
 }
 
-void JSON::CreatePlayer(std::string player)
+bool JSON::CreatePlayer(std::string player)
 {
+
     function();
     std::string name = player;
     int victory = 0;
-
-    json jsonFile;
     
-    jsonFile[player]["name"] = name;
-    jsonFile[player]["victory"] = victory;
+    dataPlayer[player]["name"] = name;
+    dataPlayer[player]["victory"] = victory;
 
-    playerj << jsonFile;
+    std::ofstream playerj("player.json", std::ios::trunc);
 
-    InitPlayer(player, nbPlayer);
+    playerj << dataPlayer;
+
+    return true;
 }

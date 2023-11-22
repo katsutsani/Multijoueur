@@ -18,11 +18,14 @@ public:
 	void UpdateGame(std::string posToken, std::string tokenPlayer);
 	void RestartGame();
 	void CheckPlayer(std::string player);
-	void CreatePlayer(std::string player);
+	bool CreatePlayer(std::string player);
 	void function();
 
 private:
 	int nbPlayer = 0; 
+
+	json dataPlayer;
+	json dataGame;
 
 };
 
