@@ -60,7 +60,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
-			game.Update(SFMLView1);
+			game.Update(SFMLView1, client);
 			game.Render(SFMLView1);
 		}
 		if (menu.isQuitting == 1)

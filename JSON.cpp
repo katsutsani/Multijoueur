@@ -42,17 +42,34 @@ void JSON::InitPlayer(std::string player, int idGame)
 void JSON::UpdateGame(std::string posToken, std::string tokenPlayer)
 {
     function();
-    std::string tab[9] = { dataGame["posToken"] };
-
-    for (int i = 0; i < 9; i++)
-    {
-        if (tab[i] == posToken)
-        {
-            tab[i] = tokenPlayer;
-        }
+    if (posToken == "A1") {
+        dataGame["posToken"][0] = tokenPlayer;
+    }
+    else if (posToken == "A2") {
+        dataGame["posToken"][1] = tokenPlayer;
+    }
+    else if (posToken == "A3") {
+        dataGame["posToken"][2] = tokenPlayer;
+    }
+    else if (posToken == "B1") {
+        dataGame["posToken"][3] = tokenPlayer;
+    }
+    else if (posToken == "B2") {
+        dataGame["posToken"][4] = tokenPlayer;
+    }
+    else if (posToken == "B3") {
+        dataGame["posToken"][5] = tokenPlayer;
+    }
+    else if (posToken == "C1") {
+        dataGame["posToken"][6] = tokenPlayer;
+    }
+    else if (posToken == "C2") {
+        dataGame["posToken"][7] = tokenPlayer;
+    }
+    else if (posToken == "C3") {
+        dataGame["posToken"][8] = tokenPlayer;
     }
 
-    dataGame["posToken"] = tab;
 
     std::ofstream gamej("game.json", std::ios::trunc);
 

@@ -35,6 +35,8 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
 
     if (col >= 0 && col < _SIZE && row >= 0 && row < _SIZE && board[row][col] == Player::None && mousePos.x > INFO_SIZE) {
         board[row][col] = currentPlayer;
+        CheckPosBoard();
+        m_client.SendInfo(changeToken.c_str());
         CheckWinner();
         if (end == false)
         {
@@ -42,6 +44,33 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
         }
         if (currentPlayer == Player::Circle) {
             AIMove();
+        }
+    }
+}
+
+void Game::CheckPosBoard()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            if (board[i][j] == Player::Cross || board[i][j] == Player::Circle)
+            {
+                switch (i)
+                {
+                case 0:
+                    changeToken = "A" + std::to_string(j + 1);
+                    break;
+                case 1:
+                    changeToken = "B" + std::to_string(j + 1);
+                    break;
+                case 2:
+                    changeToken = "C" + std::to_string(j + 1);
+                    break;
+                default:
+                    break;
+                }
+            }
         }
     }
 }
@@ -84,8 +113,9 @@ void Game::AICheckWin()
     }*/
 }
 
-void Game::Update(sf::RenderWindow& window)
+void Game::Update(sf::RenderWindow& window, ClientSocket client)
 {
+    m_client = client;
     HandleInput(window);
 }
 

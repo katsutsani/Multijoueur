@@ -56,18 +56,26 @@ void ServerSocket::ReceiveInfo()
 			if (iResult > 0) {
 
 				std::string checkname;
-
-				for (int i = 0; i < 4; i++)
+				if (recvbuf[1] == '1' || recvbuf[1] == '2' || recvbuf[1] == '3') 
 				{
-					checkname.push_back(recvbuf[i]);
+					std::string pos;
+					pos.push_back(recvbuf[0]);
+					pos.push_back(recvbuf[1]);
+					// change board
+					jsonGame.UpdateGame(pos, std::to_string(i + 1));
+					pos.clear();
+				}
+				for (int j = 0; j < 4; j++)
+				{
+					checkname.push_back(recvbuf[j]);
 				}
 				if (checkname == "name")
 				{
 					checkname.clear();
 
-					for (int i = 5; i < iResult; i++)
+					for (int j = 5; j < iResult; j++)
 					{
-						checkname.push_back(recvbuf[i]);
+						checkname.push_back(recvbuf[j]);
 					}
 
 					jsonGame.CheckPlayer(checkname);
