@@ -6,7 +6,6 @@ struct sockaddr_in hints;
 JSON jsonGame;
 
 ServerSocket::ServerSocket() {
-
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
 		printf("WSAStartup failed: %d\n", iResult);
@@ -17,7 +16,7 @@ ServerSocket::ServerSocket() {
 	hints.sin_family = AF_INET;
 	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.1.170.51", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "10.1.2.10", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -66,7 +65,7 @@ void ServerSocket::ReceiveInfo()
 				{
 					checkname.clear();
 
-					for (int i = 4; i < iResult; i++)
+					for (int i = 5; i < iResult; i++)
 					{
 						checkname.push_back(recvbuf[i]);
 					}

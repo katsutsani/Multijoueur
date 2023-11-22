@@ -1,7 +1,6 @@
 // Client.cpp : Définit le point d'entrée de l'application.
 
 #include "Client.h"
-#include "ClientSocket.h"
 #include "Game.h"
 #include "MenuWindow.h"
 #define MAX_LOADSTRING 100
@@ -145,6 +144,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+
+	static std::string name;
 	switch (message)
 	{
 	case WM_COMMAND:
@@ -182,20 +183,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			menu.MoveDown();
 			break;
 		case VK_RETURN:
-			menu.Enter(SFMLView1);
+			menu.Enter(SFMLView1, name, client);
 			break;
 		}
 	break;
 	case WM_CHAR:
-		static std::string name;
 		if (menu.isEnteringName == 1) 
 		{
 			name.push_back((char)wParam);
-		}
-		if (VK_RETURN)
-		{
-			name = "name" + name;
-			client.SendInfo(name.c_str());
+			
 		}
 		break;
 

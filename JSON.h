@@ -19,9 +19,10 @@ public:
 	void RestartGame();
 	void CheckPlayer(std::string player);
 	void CreatePlayer(std::string player);
+	void function();
 
 private:
-	int nbPlayer = 0;
+	int nbPlayer = 0; 
 
 };
 

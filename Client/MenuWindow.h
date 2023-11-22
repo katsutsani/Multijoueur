@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Game.h"
+#include "ClientSocket.h"
 
 #define Max_menu 3
 
 class MenuWindow {
 public: 
 	MenuWindow();
-	void Enter(sf::RenderWindow& window);
+	void Enter(sf::RenderWindow& window, std::string name, ClientSocket client);
 	void HandleInput(sf::RenderWindow& window);
 	void Update(sf::RenderWindow& window);
 	void Render(sf::RenderWindow& window);
