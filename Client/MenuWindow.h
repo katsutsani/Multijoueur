@@ -14,6 +14,7 @@ public:
 	void Render(sf::RenderWindow& window);
 	void MoveUp();
 	void MoveDown();
+	void UpdateName(std::string name);
 
 	int isPlaying = 0;
 	int isEnteringName = 0;
@@ -24,5 +25,7 @@ private:
 	int MenuSelected = 0;
 	sf::Font font;
 	sf::Text menu[Max_menu];
+	sf::Text name;
+	sf::Text nameEntered;
 
 };
