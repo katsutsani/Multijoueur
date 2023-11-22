@@ -1,17 +1,13 @@
 #pragma once
-#include <ws2tcpip.h>
-#include <iphlpapi.h>
-#include <stdio.h>
-#include <string.h>
-#include <iostream>
-#include <stdlib.h>
-#include <winsock2.h>
-#include <map>
+#include "framework.h"
+
 
 class ServerSocket {
 	public:
 		ServerSocket();
 		~ServerSocket();
+		void addClient();
+		void removeClient();
 		SOCKET ListenSocket = INVALID_SOCKET;
 		void ReceiveInfo();
 		void SendInfo(SOCKET clientSocket, const char* sendBuf);

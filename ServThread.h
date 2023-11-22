@@ -1,20 +1,22 @@
 #pragma once
 #include "framework.h"
 #include "ServerSocket.h"
-#include <string>
 
-class Threads {
+
+class ServThread : Threads {
 public:
-	Threads();
-	~Threads();
-	bool createServerThread();
-	bool Close();
+	ServThread();
+	~ServThread();
+	void createThread() override;
+	bool createServerThread(HWND hWnd);
+	void Close();
 	ServerSocket GetSock();
+	HWND GetWindow();
+	HANDLE GetMutex();
+	HANDLE GetThread();
+	bool needToExit = false;
 private:
-
+	HWND _hWnd;
 	ServerSocket m_servSock;
-	SOCKET tempClientSocket;
-	std::string tempString;
-	LPDWORD   dwThreadIdArray[3];
-	HANDLE  hThreadArray[3];
+	HANDLE ghMutex;
 };

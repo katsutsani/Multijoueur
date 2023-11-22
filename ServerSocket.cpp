@@ -1,7 +1,6 @@
 #include "ServerSocket.h"
 #define DEFAULT_PORT 05213
-struct sockaddr_in hints;
-
+struct sockaddr_in servHints;
 ServerSocket::ServerSocket() {
 
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -10,11 +9,11 @@ ServerSocket::ServerSocket() {
 		return;
 	}
 
-	ZeroMemory(&hints, sizeof(hints));
-	hints.sin_family = AF_INET;
-	hints.sin_port = htons(DEFAULT_PORT);
+	ZeroMemory(&servHints, sizeof(servHints));
+	servHints.sin_family = AF_INET;
+	servHints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.1.170.51", &hints.sin_addr);
+	iResult = inet_pton(servHints.sin_family, "10.1.170.51", &servHints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -30,7 +29,7 @@ ServerSocket::ServerSocket() {
 		return;
 	}
 
-	iResult = bind(ListenSocket, (struct sockaddr*)&hints, sizeof(hints));
+	iResult = bind(ListenSocket, (struct sockaddr*)&servHints, sizeof(servHints));
 	if (iResult == SOCKET_ERROR) {
 		printf("bind failed with error: %d\n", WSAGetLastError());
 		closesocket(ListenSocket);
@@ -42,6 +41,16 @@ ServerSocket::ServerSocket() {
 
 ServerSocket::~ServerSocket()
 {
+}
+
+void ServerSocket::addClient()
+{
+	players++;
+}
+
+void ServerSocket::removeClient()
+{
+	players--;
 }
 
 void ServerSocket::ReceiveInfo()

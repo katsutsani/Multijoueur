@@ -5,6 +5,7 @@
 #include "Serveur.h"
 #include "ServerSocket.h"
 #include "ServThread.h"
+#include "ServWebThread.h"
 #include <string>
 
 #define MAX_LOADSTRING 100
@@ -17,8 +18,9 @@ HWND hWnd;
 bool isPlaying = false;
 SOCKET tempClientSocket;
 std::string tempString;
-
-
+ServThread servThread;
+HANDLE allThreads[2];
+ServWebThread servWebThread;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -48,7 +50,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SERVEUR));
 	MSG msg;
-	Threads servThread;
+	servThread.createServerThread(hWnd);
+	allThreads[0] = servThread.GetThread();
+	allThreads[1] = servWebThread.GetThread();
 
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
@@ -159,38 +163,46 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	case WM_DESTROY:
+		servThread.Close();
+		servWebThread.Close();
+		WaitForMultipleObjects(2, allThreads, TRUE, INFINITE);
+		for (int i = 0; i < 2; i++)
+			CloseHandle(allThreads[i]);
+
+		CloseHandle(servThread.GetMutex());
+		CloseHandle(servWebThread.GetMutex());
 		PostQuitMessage(0);
 		break;
 	case WM_USER:
-		//switch (lParam)
-		//{
-		//case FD_ACCEPT:
-		//	tempClientSocket = INVALID_SOCKET;
-		//	servSock.ClientSocket.insert({ servSock.players,tempClientSocket });
-		//	servSock.ClientSocket[servSock.players] = accept(servSock.ListenSocket, NULL, NULL);
-		//	if (servSock.ClientSocket[servSock.players] == INVALID_SOCKET) {
-		//		printf("accept failed: %d\n", WSAGetLastError());
-		//		closesocket(servSock.ListenSocket);
-		//		WSACleanup();
-		//		break;
-		//	}
-		//	if (servSock.players >= 2) {
-		//		tempString = std::to_string(servSock.players) + "S";
-		//	}
-		//	else {
-		//		tempString = std::to_string(servSock.players) + "P";
+		switch (lParam)
+		{
+		case FD_ACCEPT:
+			tempClientSocket = INVALID_SOCKET;
+			servThread.GetSock().ClientSocket.insert({ servThread.GetSock().players,tempClientSocket });
+			servThread.GetSock().ClientSocket[servThread.GetSock().players] = accept(servThread.GetSock().ListenSocket, NULL, NULL);
+			if (servThread.GetSock().ClientSocket[servThread.GetSock().players] == INVALID_SOCKET) {
+				printf("accept failed: %d\n", WSAGetLastError());
+				closesocket(servThread.GetSock().ListenSocket);
+				WSACleanup();
+				break;
+			}
+			if (servThread.GetSock().players >= 2) {
+				tempString = std::to_string(servThread.GetSock().players) + "S";
+			}
+			else {
+				tempString = std::to_string(servThread.GetSock().players) + "P";
 
-		//	}
-		//	servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
-		//	servSock.players++;
-		//	break;
-		//case FD_CLOSE:
-		//	servSock.players--;
-		//	break;
-		//case FD_READ:
-		//	servSock.ReceiveInfo();
-		//	break;
-		//}
+			}
+			servThread.GetSock().SendInfo(servThread.GetSock().ClientSocket[servThread.GetSock().players], tempString.c_str());
+			servThread.GetSock().addClient();
+			break;
+		case FD_CLOSE:
+			servThread.GetSock().removeClient();
+			break;
+		case FD_READ:
+			servThread.GetSock().ReceiveInfo();
+			break;
+		}
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}

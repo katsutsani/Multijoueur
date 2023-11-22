@@ -1,61 +1,127 @@
 #include "ServThread.h"
-CRITICAL_SECTION m_cs;
-
-DWORD WINAPI ThreadProc(LPVOID lpParameters)
+CRITICAL_SECTION m_servCS;
+DWORD WINAPI servThreadProc(LPVOID lpParameters)
 {
-	//WSAAsyncSelect(servSock.ListenSocket, _hWnd, WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ);
-	InitializeCriticalSection(&m_cs);
+	ServThread* thread = (ServThread*)lpParameters;
+
+	WSAAsyncSelect(thread->GetSock().ListenSocket, thread->GetWindow(), WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ);
+
+	InitializeCriticalSection(&m_servCS);
 
 	// pour bloquer un bloc d'instructions
-	EnterCriticalSection(&m_cs);
+	EnterCriticalSection(&m_servCS);
 
-	Threads* thread = (Threads*)lpParameters;
+	while (thread->GetSock().ListenSocket != SOCKET_ERROR && !thread->needToExit)
+	{
+		DWORD dwWaitResult = WaitForSingleObject(thread->GetMutex(), INFINITE);
+		switch (dwWaitResult)
+		{
+		case WAIT_OBJECT_0:
+			if (!ReleaseMutex(thread->GetMutex())) {
 
-	if (listen(thread->GetSock().ListenSocket, SOMAXCONN) == SOCKET_ERROR) {
-		printf("listen failed with error: %ld\n", WSAGetLastError());
-		closesocket(thread->GetSock().ListenSocket);
-		WSACleanup();
+			}
+			if (listen(thread->GetSock().ListenSocket, SOMAXCONN) == SOCKET_ERROR) {
+				printf("listen failed with error: %ld\n", WSAGetLastError());
+				closesocket(thread->GetSock().ListenSocket);
+				WSACleanup();
+			}
+			break;
+		case WAIT_ABANDONED:
+			// pour libérer le bloc
+			LeaveCriticalSection(&m_servCS);
+
+			// quand c'est fini
+			DeleteCriticalSection(&m_servCS);
+			return 0;
+		default:
+			break;
+		}
 	}
 
 	// pour libérer le bloc
-	LeaveCriticalSection(&m_cs);
+	LeaveCriticalSection(&m_servCS);
 
 	// quand c'est fini
-	DeleteCriticalSection(&m_cs);
+	DeleteCriticalSection(&m_servCS);
 	return 0;
 }
 
 
-Threads::Threads() {
-	hThreadArray[1] = CreateThread(
+ServThread::ServThread() {
+
+}
+
+ServThread::~ServThread()
+{
+
+}
+
+void ServThread::createThread()
+{
+	ghMutex = CreateMutex(
+		NULL,              // default security attributes
+		FALSE,             // initially not owned
+		NULL);             // unnamed mutex
+
+	if (ghMutex == NULL)
+	{
+		printf("CreateMutex error: %d\n", GetLastError());
+		return;
+	}
+	hThread = CreateThread(
 		NULL,
 		0,
-		ThreadProc,
+		servThreadProc,
 		this,
 		0,
-		dwThreadIdArray[1]);
+		dwThreadId);
 }
 
-Threads::~Threads()
+bool ServThread::createServerThread(HWND hWnd)
 {
+	ghMutex = CreateMutex(
+		NULL,              // default security attributes
+		FALSE,             // initially not owned
+		NULL);             // unnamed mutex
 
-}
-
-
-
-bool Threads::createServerThread()
-{
-
-	return false;
-}
-
-
-
-bool Threads::Close() {
+	if (ghMutex == NULL)
+	{
+		printf("CreateMutex error: %d\n", GetLastError());
+		return false;
+	}
+	_hWnd = hWnd;
+	hThread = CreateThread(
+		NULL,
+		0,
+		servThreadProc,
+		this,
+		0,
+		dwThreadId);
 	return true;
 }
 
-ServerSocket Threads::GetSock()
+
+
+void ServThread::Close() {
+	needToExit = true;
+}
+
+ServerSocket ServThread::GetSock()
 {
 	return m_servSock;
+}
+
+HWND ServThread::GetWindow()
+{
+	return _hWnd;
+}
+
+HANDLE ServThread::GetMutex()
+{
+	return ghMutex;
+}
+
+HANDLE ServThread::GetThread()
+{
+	return hThread;
 }
