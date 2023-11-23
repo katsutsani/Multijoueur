@@ -19,7 +19,7 @@ bool isPlaying = false;
 SOCKET tempClientSocket;
 JSON jsonData;
 std::string tempString;
-ServThread servThread;
+ServerSocket servSock;
 HANDLE allThreads[2];
 ServWebThread servWebThread;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
@@ -51,15 +51,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SERVEUR));
 	MSG msg;
-	servThread.createServerThread(hWnd);
+	WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ);
 	servWebThread.createServerWebThread(hWnd);
-	allThreads[0] = servThread.GetThread();
-	allThreads[1] = servWebThread.GetThread();
+	allThreads[0] = servWebThread.GetThread();
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
 		{
+			if (listen(servSock.ListenSocket, SOMAXCONN) == SOCKET_ERROR) {
+				printf("listen failed with error: %ld\n", WSAGetLastError());
+				closesocket(servSock.ListenSocket);
+				WSACleanup();
+			}
 
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
@@ -164,13 +168,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 	case WM_DESTROY:
-		servThread.Close();
 		servWebThread.Close();
 		WaitForMultipleObjects(2, allThreads, TRUE, INFINITE);
 		for (int i = 0; i < 2; i++)
 			CloseHandle(allThreads[i]);
-
-		CloseHandle(servThread.GetMutex());
 		CloseHandle(servWebThread.GetMutex());
 		PostQuitMessage(0);
 		break;
@@ -179,28 +180,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 		case FD_ACCEPT:
 			tempClientSocket = INVALID_SOCKET;
-			servThread.GetSock().ClientSocket.insert({ servThread.GetSock().players,tempClientSocket });
-			servThread.GetSock().ClientSocket[servThread.GetSock().players] = accept(servThread.GetSock().ListenSocket, NULL, NULL);
-			if (servThread.GetSock().ClientSocket[servThread.GetSock().players] == INVALID_SOCKET) {
+			servSock.ClientSocket.insert({ servSock.players,tempClientSocket });
+			servSock.ClientSocket[servSock.players] = accept(servSock.ListenSocket, NULL, NULL);
+			if (servSock.ClientSocket[servSock.players] == INVALID_SOCKET) {
 				printf("accept failed: %d\n", WSAGetLastError());
-				closesocket(servThread.GetSock().ListenSocket);
+				closesocket(servSock.ListenSocket);
 				WSACleanup();
 				break;
 			}
-			if (servThread.GetSock().players >= 2) {
-				tempString = std::to_string(servThread.GetSock().players) + "S";
+			if (servSock.players >= 2) {
+				tempString = std::to_string(servSock.players) + "S";
 			}
 			else {
-				tempString = std::to_string(servThread.GetSock().players) + "P";
+				tempString = std::to_string(servSock.players) + "P";
 			}
-			servThread.GetSock().SendInfo(servThread.GetSock().ClientSocket[servThread.GetSock().players], tempString.c_str());
-			servThread.GetSock().addClient();
+			servSock.SendInfo(servSock.ClientSocket[servSock.players], tempString.c_str());
+			servSock.players++;
 			break;
 		case FD_CLOSE:
-			servThread.GetSock().removeClient();
+			servSock.players--;
 			break;
 		case FD_READ:
-			servThread.GetSock().ReceiveInfo();
+			servSock.ReceiveInfo();
 			break;
 		}
 	default:
