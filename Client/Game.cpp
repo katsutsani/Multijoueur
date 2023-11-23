@@ -39,7 +39,6 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
         CheckPosBoard(row, col);
         m_client.SendInfo(changeToken.c_str());
         std::string token;
-        board[row][col] = Player::None;
 
         if (CheckWinner())
         {
@@ -172,45 +171,6 @@ void Game::BoardModif(std::string pos, std::string token)
             board[2][2] = Player::Circle;
         }
     }
-}
-
-
-void Game::AIMove()
-{
-    std::vector<std::pair<int, int>> availableMoves;
-
-    for (int i = 0; i < _SIZE; ++i) {
-        for (int j = 0; j < _SIZE; ++j) {
-            if (board[i][j] == Player::None) {
-                availableMoves.push_back(std::make_pair(i, j));
-            }
-        }
-    }
-
-    if (!availableMoves.empty()) {
-        std::srand(std::time(0));
-        int randomIndex = std::rand() % availableMoves.size();
-        std::pair<int, int> move = availableMoves[randomIndex];
-        board[move.first][move.second] = currentPlayer;
-        CheckWinner();
-        SwitchPlayer();
-    }
-}
-
-void Game::AICheckWin()
-{
-    /*for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
-            if (board[i][j] == Player::None) {
-
-                board[i][j] = Player::Cross;
-
-
-
-                board[i][j] = Player::None;
-            }
-        }
-    }*/
 }
 
 void Game::Update(sf::RenderWindow& window, ClientSocket client)
