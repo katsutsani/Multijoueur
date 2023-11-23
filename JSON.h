@@ -12,7 +12,6 @@ public:
 
 	int GetVictory(std::string player);
 	json GetPlayer(std::string player);
-	std::string GetPlayerFromGame(std::string index);
 	/*void UpdatePlayerJson();
 	void UpdateGameJson();*/
 	void InitPlayer(std::string player, int id);

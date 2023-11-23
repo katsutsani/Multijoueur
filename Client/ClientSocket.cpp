@@ -19,7 +19,7 @@ ClientSocket::ClientSocket() {
 	hints.sin_family = AF_INET;
 	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.189.141.66", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "192.168.76.209", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -91,46 +91,15 @@ void ClientSocket::ReceiveInfo(Game* game, Players* player)
 	do {
 		iResult = recv(ConnectSocket, recvbuf, 512, 0);
 		if (iResult > 0) {
-			if (index == -1) {
-				index = recvbuf[0] - '0';
-			}
-			std::string checkAllPlayer;
-			for (int i = 0; i < 7; i++) {
-				checkAllPlayer.push_back(recvbuf[i]);
-			}
-			if (checkAllPlayer == "player1") {
-				checkAllPlayer.clear();
-
-				for (int k = 7; k < iResult; k++)
-				{
-					checkAllPlayer.push_back(recvbuf[k]);
-				}
-				if (checkAllPlayer != "") {
-					player->SetPlayersString(checkAllPlayer, 0);
-					canPlay = true;
-				}
-
-			}
-			else if (checkAllPlayer == "player2") {
-				checkAllPlayer.clear();
-
-				for (int k = 7; k < iResult; k++)
-				{
-					checkAllPlayer.push_back(recvbuf[k]);
-				}
-				if (checkAllPlayer != "") {
-					player->SetPlayersString(checkAllPlayer, 1);
-					canPlay = true;
-				}
-			}
+			index << recvbuf[0];
 			if (recvbuf[1] == 'S') {
-				SendInfo("I'm spectator");
+				SendInfo("i'm Spectator");
 			}
 			else if (recvbuf[1] == 'P') {
 				std::string tempString = "I'm player " + std::to_string(index);
 				SendInfo(tempString.c_str());
 			}
-
+			
 			std::string pos;
 			for (int j = 0; j < 2; j++)
 			{
@@ -141,7 +110,6 @@ void ClientSocket::ReceiveInfo(Game* game, Players* player)
 
 			if (pos == "A1" || pos == "A2" || pos == "A3" || pos == "B1" || pos == "B2" || pos == "B3" || pos == "C1" || pos == "C2" || pos == "C3")
 			{
-				game->SwitchPlayer();
 				game->BoardModif(pos, token);
 				if (recvbuf[9] == '1' || recvbuf[9] == '2')
 				{
@@ -158,7 +126,7 @@ void ClientSocket::ReceiveInfo(Game* game, Players* player)
 					game->Init();
 				}
 			}
-
+			
 			std::cout << "Bytes received: %d\n", iResult;
 		}
 		else if (iResult == 0) {

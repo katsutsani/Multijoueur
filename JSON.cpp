@@ -48,10 +48,6 @@ json JSON::GetPlayer(std::string player)
     return dataPlayer[player];
 }
 
-std::string JSON::GetPlayerFromGame(std::string index) {
-    return dataGame[index]["name"];
-}
-
 void JSON::InitPlayer(std::string player, int idGame)
 {
     function();
@@ -113,8 +109,8 @@ void JSON::RestartGame()
 
     function();
     std::string tab[9] = { "A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3" };
-    std::string name1 = "";
-    std::string name2 = "";
+    std::string name1 = "joueurX";
+    std::string name2 = "joueurO";
     int victory = 0;
 
     dataGame["posToken"] = tab;

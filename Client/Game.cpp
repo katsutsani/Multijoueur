@@ -23,15 +23,12 @@ void Game::HandleInput(sf::RenderWindow& window)
         if (event.type == sf::Event::Closed) {
             window.close();
         }
-        if (event.type == sf::Event::MouseButtonPressed && m_client.canPlay) {
-            if (currentPlayer == Player::Cross && m_client.index == 0 ||currentPlayer == Player::Circle && m_client.index == 1) {
-                if (event.mouseButton.button == sf::Mouse::Left) {
-                    if (currentPlayer == Player::Cross || currentPlayer == Player::Circle) {
-                        HandleMouseClick(window);
-                    }
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                if (currentPlayer == Player::Cross || currentPlayer == Player::Circle) {
+                    HandleMouseClick(window);
                 }
             }
-           
         }
     }
 }
@@ -46,7 +43,6 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
         board[row][col] = currentPlayer;
         CheckPosBoard(row, col);
         m_client.SendInfo(changeToken.c_str());
-        SwitchPlayer();
         std::string token;
 
         if (CheckWinner())
