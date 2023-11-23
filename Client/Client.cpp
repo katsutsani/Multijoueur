@@ -219,7 +219,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case FD_READ:
 
-			client.ReceiveInfo(&game);
+			client.ReceiveInfo(&game, &players);
 
 			break;
 		case FD_CONNECT:
