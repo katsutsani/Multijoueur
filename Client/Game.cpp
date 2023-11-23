@@ -19,7 +19,7 @@ void Game::HandleInput(sf::RenderWindow& window)
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button == sf::Mouse::Left) {
-                if (currentPlayer == Player::Cross) {
+                if (currentPlayer == Player::Cross || currentPlayer == Player::Circle) {
                     HandleMouseClick(window);
                 }
             }
@@ -41,9 +41,6 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
         if (end == false)
         {
             SwitchPlayer();
-        }
-        if (currentPlayer == Player::Circle) {
-            AIMove();
         }
     }
 }
