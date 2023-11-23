@@ -36,7 +36,7 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
 
     if (col >= 0 && col < _SIZE && row >= 0 && row < _SIZE && board[row][col] == Player::None && mousePos.x > INFO_SIZE) {
         board[row][col] = currentPlayer;
-        CheckPosBoard();
+        CheckPosBoard(row, col);
         m_client.SendInfo(changeToken.c_str());
         std::string token;
         board[row][col] = Player::None;
@@ -53,31 +53,22 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
     }
 }
 
-void Game::CheckPosBoard()
+void Game::CheckPosBoard(int row, int col)
 {
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
-        {
-            if (board[i][j] == Player::Cross || board[i][j] == Player::Circle)
-            {
-                switch (i)
+                switch (row)
                 {
                 case 0:
-                    changeToken = "A" + std::to_string(j + 1);
+                    changeToken = "A" + std::to_string(col + 1);
                     break;
                 case 1:
-                    changeToken = "B" + std::to_string(j + 1);
+                    changeToken = "B" + std::to_string(col + 1);
                     break;
                 case 2:
-                    changeToken = "C" + std::to_string(j + 1);
+                    changeToken = "C" + std::to_string(col + 1);
                     break;
                 default:
                     break;
                 }
-            }
-        }
-    }
 }
 
 void Game::BoardModif(std::string pos, std::string token)
