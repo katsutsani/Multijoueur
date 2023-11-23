@@ -84,7 +84,7 @@ void ClientSocket::ShutDown()
 	}
 }
 
-void ClientSocket::ReceiveInfo(Game* game)
+void ClientSocket::ReceiveInfo(Game* game, Players* player)
 {
 	char recvbuf[512];
 	do {
@@ -109,7 +109,7 @@ void ClientSocket::ReceiveInfo(Game* game)
 				{
 					ID = 2;
 				}
-				//players.RenderWinner(ID);
+				player->RenderWinner(ID);
 			}
 			std::string pos;
 			for (int j = 0; j < 2; j++)

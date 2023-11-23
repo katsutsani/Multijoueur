@@ -16,7 +16,7 @@ public:
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	void SendInfo(const char* sendbuf);
 	void ShutDown();
-	void ReceiveInfo(Game* game);
+	void ReceiveInfo(Game* game, Players* player);
 	void connectToServ(HWND hWnd);
 	int index;
 private:
