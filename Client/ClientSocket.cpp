@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Players.h"
 #include "ClientSocket.h"
 
 #include <string>

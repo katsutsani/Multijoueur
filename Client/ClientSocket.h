@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <winsock2.h>
-
+class Players;
 class Game;
 
 class ClientSocket {
