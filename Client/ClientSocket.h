@@ -18,7 +18,8 @@ public:
 	void ShutDown();
 	void ReceiveInfo(Game* game, Players* player);
 	void connectToServ(HWND hWnd);
-	int index;
+	int index = -1;
+	bool canPlay = false;
 private:
 
 	int iResult;

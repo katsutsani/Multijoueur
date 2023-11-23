@@ -17,7 +17,7 @@ ServerSocket::ServerSocket() {
 	servHints.sin_family = AF_INET;
 	servHints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "192.168.76.209", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "10.189.141.66", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -109,7 +109,17 @@ void ServerSocket::ReceiveInfo()
 					jsonGame.CheckPlayer(checkname);
 
 					checkname.clear();
+
+					std::string tempChar = "player2" + jsonGame.GetPlayerFromGame("player2");
+					if (tempChar != "" && ClientSocket[0]) {
+						SendInfo(ClientSocket[0], tempChar.c_str());
+					}
+					tempChar = "player1" + jsonGame.GetPlayerFromGame("player1");
+					if (tempChar != "" && ClientSocket[1]) {
+						SendInfo(ClientSocket[1], tempChar.c_str());
+					}
 				}
+
 				//----------------------------------------------------------------------------
 				std::cout << "Bytes received: %d\n", iResult;
 			}
