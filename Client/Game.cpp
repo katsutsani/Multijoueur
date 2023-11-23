@@ -208,6 +208,10 @@ void Game::CheckWinner()
 
 void Game::DisplayWinner()
 {
-    //std::cout << "Player " << static_cast<int>(currentPlayer) << " wins!\n";
-    end = true;
+    /*end = true;*/
+    for (int i = 0; i < _SIZE; ++i) {
+        for (int j = 0; j < _SIZE; ++j) {
+            board[i][j] = Player::None;
+        }
+    }
 }
