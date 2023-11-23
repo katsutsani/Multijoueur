@@ -55,20 +55,6 @@ void ServerSocket::ReceiveInfo()
 		{
 			iResult = recv(ClientSocket[i], recvbuf, 512, 0);
 			if (iResult > 0) {
-				std::string win;
-				for (int j = 2; j < 11; j++)
-				{
-					win.push_back(recvbuf[j]);
-				}
-				if (win == "playerWin")
-				{
-					int ID = i + 1;
-					win = win + std::to_string(ID);
-					jsonGame.victory(i);
-					SendInfoBis(win.c_str());
-					jsonGame.RestartGame();
-					win.clear();
-				}
 				//--------------------------------------------------------------
 				std::string checkname;
 				if (recvbuf[1] == '1' || recvbuf[1] == '2' || recvbuf[1] == '3') 
@@ -82,6 +68,20 @@ void ServerSocket::ReceiveInfo()
 					pos.push_back(pIndex.c_str()[0]);
 					SendInfoBis(pos.c_str());
 					pos.clear();
+				}
+				std::string win;
+				for (int j = 2; j < 11; j++)
+				{
+					win.push_back(recvbuf[j]);
+				}
+				if (win == "playerWin")
+				{
+					int ID = i + 1;
+					win = win + std::to_string(ID);
+					//jsonGame.victory(i);
+					SendInfoBis(win.c_str());
+					jsonGame.RestartGame();
+					win.clear();
 				}
 				for (int j = 0; j < 4; j++)
 				{
