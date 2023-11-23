@@ -116,7 +116,7 @@ void Game::Update(sf::RenderWindow& window, ClientSocket client)
     HandleInput(window);
 }
 
-void Game::Render(sf::RenderWindow& window)
+void Game::Render(sf::RenderWindow& window, Players* players)
 {
     window.clear();
 
@@ -145,7 +145,7 @@ void Game::Render(sf::RenderWindow& window)
         }
     }
 
-    players.Draw(window, currentPlayer);
+    players->Draw(window, currentPlayer);
 
     window.display();
 }

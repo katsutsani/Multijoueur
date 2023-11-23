@@ -12,6 +12,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre 
 HWND hWnd;
 sf::RenderWindow SFMLView1;
 ClientSocket client;
+Players players;
 MenuWindow menu;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -61,7 +62,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		else
 		{
 			game.Update(SFMLView1, client);
-			game.Render(SFMLView1);
+			game.Render(SFMLView1, &players);
 		}
 		if (menu.isQuitting == 1)
 		{
@@ -183,7 +184,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			menu.MoveDown();
 			break;
 		case VK_RETURN:
-			menu.Enter(SFMLView1, name, client);
+			menu.Enter(SFMLView1, name, client, &players);
 			break;
 		}
 	break;

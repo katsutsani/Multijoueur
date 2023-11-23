@@ -50,7 +50,7 @@ void MenuWindow::HandleInput(sf::RenderWindow& window)
     }
 }
 
-void MenuWindow::Enter(sf::RenderWindow& window, std::string name, ClientSocket client) 
+void MenuWindow::Enter(sf::RenderWindow& window, std::string name, ClientSocket client, Players* p) 
 {
     if (isEnteringName == 0) 
     {
@@ -72,6 +72,8 @@ void MenuWindow::Enter(sf::RenderWindow& window, std::string name, ClientSocket 
     }
     else
     {
+        name.erase(name.begin());
+        p->SetPlayersString(name);
         name = "name" + name;
         client.SendInfo(name.c_str());
         isEnteringName = 0;
