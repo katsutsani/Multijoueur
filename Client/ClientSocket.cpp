@@ -99,19 +99,7 @@ void ClientSocket::ReceiveInfo(Game* game, Players* player)
 				std::string tempString = "I'm player " + std::to_string(index);
 				SendInfo(tempString.c_str());
 			}
-			if (recvbuf[9] == '1' || recvbuf[9] == '2')
-			{
-				int ID;
-				if (recvbuf[9] == '1')
-				{
-					ID = 1;
-				}
-				else
-				{
-					ID = 2;
-				}
-				player->RenderWinner(ID);
-			}
+			
 			std::string pos;
 			for (int j = 0; j < 2; j++)
 			{
@@ -124,7 +112,20 @@ void ClientSocket::ReceiveInfo(Game* game, Players* player)
 			{
 				game->BoardModif(pos, token);
 			}
-			game->Init();
+			if (recvbuf[9] == '1' || recvbuf[9] == '2')
+			{
+				int ID;
+				if (recvbuf[9] == '1')
+				{
+					ID = 1;
+				}
+				else
+				{
+					ID = 2;
+				}
+				player->RenderWinner(ID);
+				game->Init();
+			}
 			std::cout << "Bytes received: %d\n", iResult;
 		}
 		else if (iResult == 0) {
