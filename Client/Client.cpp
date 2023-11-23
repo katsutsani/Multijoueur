@@ -164,10 +164,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 		switch (lParam)
 		{
-
-		case FD_WRITE:
-
-			break;
 		case FD_READ:
 
 			client.ReceiveInfo();

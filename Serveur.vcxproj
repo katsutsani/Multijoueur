@@ -103,7 +103,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -118,7 +118,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>false</ConformanceMode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -130,14 +130,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="ServThread.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ServerSocket.h" />
     <ClInclude Include="Serveur.h" />
+    <ClInclude Include="ServWebSock.h" />
+    <ClInclude Include="ServWebThread.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Threads.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ServerSocket.cpp" />
+    <ClCompile Include="ServThread.cpp" />
     <ClCompile Include="Serveur.cpp" />
+    <ClCompile Include="ServWebSock.cpp" />
+    <ClCompile Include="ServWebThread.cpp" />
+    <ClCompile Include="Threads.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Serveur.rc" />
