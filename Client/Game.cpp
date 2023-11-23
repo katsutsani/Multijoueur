@@ -38,8 +38,9 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
         board[row][col] = currentPlayer;
         CheckPosBoard();
         m_client.SendInfo(changeToken.c_str());
-        board[row][col] = Player::None;
         std::string token;
+        board[row][col] = Player::None;
+
         if (CheckWinner())
         {
             std::string win = "playerWin";
@@ -96,33 +97,33 @@ void Game::BoardModif(std::string pos, std::string token)
     {
         if (token == "1")
         {
-            board[1][0] = Player::Cross;
+            board[0][1] = Player::Cross;
         }
         else
         {
-            board[1][0] = Player::Circle;
+            board[0][1] = Player::Circle;
         }
     }
     else if (pos == "A3")
     {
         if (token == "1")
         {
-            board[2][0] = Player::Cross;
+            board[0][2] = Player::Cross;
         }
         else
         {
-            board[2][0] = Player::Circle;
+            board[0][2] = Player::Circle;
         }
     }
     else if (pos == "B1")
     {
         if (token == "1")
         {
-            board[0][1] = Player::Cross;
+            board[1][0] = Player::Cross;
         }
         else
         {
-            board[0][1] = Player::Circle;
+            board[1][0] = Player::Circle;
         }
     }
     else if (pos == "B2")
@@ -140,33 +141,33 @@ void Game::BoardModif(std::string pos, std::string token)
     {
         if (token == "1")
         {
-            board[2][1] = Player::Cross;
+            board[1][2] = Player::Cross;
         }
         else
         {
-            board[2][1] = Player::Circle;
+            board[1][2] = Player::Circle;
         }
     }
     else if (pos == "C1")
     {
         if (token == "1")
         {
-            board[0][2] = Player::Cross;
+            board[2][0] = Player::Cross;
         }
         else
         {
-            board[0][2] = Player::Circle;
+            board[2][0] = Player::Circle;
         }
     }
     else if (pos == "C2")
     {
         if (token == "1")
         {
-            board[1][2] = Player::Cross;
+            board[2][1] = Player::Cross;
         }
         else
         {
-            board[1][2] = Player::Circle;
+            board[2][1] = Player::Circle;
         }
     }
     else if (pos == "C3")
