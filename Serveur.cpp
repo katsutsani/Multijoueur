@@ -49,7 +49,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	MSG msg;
 	WSAAsyncSelect(servSock.ListenSocket, hWnd, WM_USER, FD_ACCEPT | FD_CLOSE | FD_READ);
-
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
