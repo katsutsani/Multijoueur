@@ -68,21 +68,22 @@ void ServerSocket::ReceiveInfo()
 					pos.push_back(pIndex.c_str()[0]);
 					SendInfoBis(pos.c_str());
 					pos.clear();
+					std::string win;
+					for (int j = 2; j < 11; j++)
+					{
+						win.push_back(recvbuf[j]);
+					}
+					if (win == "playerWin")
+					{
+						int ID = i + 1;
+						win = win + std::to_string(ID);
+						//jsonGame.victory(i);
+						SendInfoBis(win.c_str());
+						jsonGame.RestartGame();
+						win.clear();
+					}
 				}
-				std::string win;
-				for (int j = 2; j < 11; j++)
-				{
-					win.push_back(recvbuf[j]);
-				}
-				if (win == "playerWin")
-				{
-					int ID = i + 1;
-					win = win + std::to_string(ID);
-					//jsonGame.victory(i);
-					SendInfoBis(win.c_str());
-					jsonGame.RestartGame();
-					win.clear();
-				}
+		
 				for (int j = 0; j < 4; j++)
 				{
 					checkname.push_back(recvbuf[j]);
