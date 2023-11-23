@@ -15,7 +15,7 @@ ClientSocket::ClientSocket() {
 	hints.sin_family = AF_INET;
 	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.1.2.10", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "10.1.170.58", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
