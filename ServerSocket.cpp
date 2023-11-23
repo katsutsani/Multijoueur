@@ -75,6 +75,7 @@ void ServerSocket::ReceiveInfo()
 					pos.push_back(recvbuf[1]);
 					// change board
 					jsonGame.UpdateGame(pos, std::to_string(i + 1));
+					pos.push_back(recvbuf[2]);
 					SendInfoBis(pos.c_str());
 					pos.clear();
 				}

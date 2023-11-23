@@ -114,7 +114,7 @@ void ClientSocket::ReceiveInfo()
 			std::string pos;
 			for (int j = 0; j < 2; j++)
 			{
-				pos = recvbuf[j];
+				pos.push_back(recvbuf[j]);
 			}
 			std::string token;
 			token = recvbuf[2];
