@@ -86,7 +86,7 @@ void ServerSocket::ReceiveInfo()
 				{
 					checkname.clear();
 
-					for (int j = 5; j < iResult; j++)
+					for (int j = 4; j < iResult; j++)
 					{
 						checkname.push_back(recvbuf[j]);
 					}

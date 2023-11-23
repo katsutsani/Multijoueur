@@ -16,8 +16,9 @@ public:
 	void ShutDown();
 	void ReceiveInfo();
 	void connectToServ(HWND hWnd);
-private:
 	int index;
+private:
+
 	int iResult;
 	WSADATA wsaData;
 

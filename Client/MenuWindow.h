@@ -8,7 +8,7 @@
 class MenuWindow {
 public: 
 	MenuWindow();
-	void Enter(sf::RenderWindow& window, std::string name, ClientSocket client);
+	void Enter(sf::RenderWindow& window, std::string name, ClientSocket client, Players* p);
 	void HandleInput(sf::RenderWindow& window);
 	void Update(sf::RenderWindow& window);
 	void Render(sf::RenderWindow& window);

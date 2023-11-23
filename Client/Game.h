@@ -17,7 +17,7 @@ public:
 	void AIMove();
 	void AICheckWin();
 	void Update(sf::RenderWindow& window, ClientSocket client);
-	void Render(sf::RenderWindow& window);
+	void Render(sf::RenderWindow& window, Players* players);
 	void DrawPlayer1(sf::RenderWindow& window, int row, int col);
 	void DrawPlayer2(sf::RenderWindow& window, int row, int col);
 	void SwitchPlayer();
@@ -33,6 +33,5 @@ public:
 
 private:
 	bool end = false;
-	Players players;
 
 };
