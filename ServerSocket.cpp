@@ -63,6 +63,7 @@ void ServerSocket::ReceiveInfo()
 				{
 					int ID = i + 1;
 					win = win + std::to_string(ID);
+					jsonGame.victory(i);
 					SendInfoBis(win.c_str());
 					win.clear();
 				}

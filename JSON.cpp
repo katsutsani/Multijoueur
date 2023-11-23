@@ -11,6 +11,33 @@ void JSON::function()
     /*dataGame = json::parse(gamef);*/
 }
 
+void JSON::victory(int player)
+{
+    function();
+    std::string players;
+
+    if (player == 0)
+    {
+        players = dataGame["player1"]["name"];
+    }
+    else if (player == 1)
+    {
+        players = dataGame["player2"]["name"];
+    }
+
+    int victory;
+
+    victory = dataPlayer[players]["victory"];
+
+    victory++;
+
+    dataPlayer[player]["victory"] = victory;
+
+    std::ofstream playerj("player.json", std::ios::trunc);
+
+    playerj << dataPlayer;
+}
+
 int JSON::GetVictory(std::string player)
 {
     return GetPlayer(player)["victory"];
