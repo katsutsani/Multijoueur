@@ -56,7 +56,7 @@ void ServerSocket::ReceiveInfo()
 			iResult = recv(ClientSocket[i], recvbuf, 512, 0);
 			if (iResult > 0) {
 				std::string win;
-				for (int j = 3; j < 12; j++)
+				for (int j = 2; j < 11; j++)
 				{
 					win.push_back(recvbuf[j]);
 				}
