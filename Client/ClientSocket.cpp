@@ -111,21 +111,22 @@ void ClientSocket::ReceiveInfo(Game* game, Players* player)
 			if (pos == "A1" || pos == "A2" || pos == "A3" || pos == "B1" || pos == "B2" || pos == "B3" || pos == "C1" || pos == "C2" || pos == "C3")
 			{
 				game->BoardModif(pos, token);
-			}
-			if (recvbuf[9] == '1' || recvbuf[9] == '2')
-			{
-				int ID;
-				if (recvbuf[9] == '1')
+				if (recvbuf[9] == '1' || recvbuf[9] == '2')
 				{
-					ID = 1;
+					int ID;
+					if (recvbuf[9] == '1')
+					{
+						ID = 1;
+					}
+					else
+					{
+						ID = 2;
+					}
+					player->RenderWinner(ID);
+					game->Init();
 				}
-				else
-				{
-					ID = 2;
-				}
-				player->RenderWinner(ID);
-				game->Init();
 			}
+			
 			std::cout << "Bytes received: %d\n", iResult;
 		}
 		else if (iResult == 0) {
