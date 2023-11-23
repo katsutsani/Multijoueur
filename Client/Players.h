@@ -13,7 +13,7 @@ class Players
 {
 public :
 	Players();
-	void SetPlayersString(std::string name);
+	void SetPlayersString(std::string name, int index);
 	void Draw(sf::RenderWindow& window, Player currentPlayer);
 
 private :

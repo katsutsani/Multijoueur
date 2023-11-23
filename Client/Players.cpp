@@ -20,15 +20,15 @@ Players::Players()
 	player2.setPosition(2, GRID_SIZE - 40);
 }
 
-void Players::SetPlayersString(std::string name)
+void Players::SetPlayersString(std::string name, int index)
 {
 	std::string p1 = player1.getString();
 	std::string p2 = player2.getString();
-	if (p1.compare("Player 1") == 0)
+	if (index == 0)
 	{
 		player1.setString(name);
 	}
-	else if (p2.compare("Player 2") == 0)
+	else if (index == 1)
 	{
 		player2.setString(name);
 	}
