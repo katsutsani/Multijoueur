@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <winsock2.h>
 
+class Game;
+
 class ClientSocket {
 public:
 	ClientSocket();
@@ -14,7 +16,7 @@ public:
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	void SendInfo(const char* sendbuf);
 	void ShutDown();
-	void ReceiveInfo();
+	void ReceiveInfo(Game* game);
 	void connectToServ(HWND hWnd);
 	int index;
 private:

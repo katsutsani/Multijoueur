@@ -2,9 +2,8 @@
 #include "framework.h"
 #include <cstdlib>
 #include <ctime>
-
-#include "Players.h"
 #include "ClientSocket.h"
+#include "Players.h"
 
 const int _SIZE = 3;
 

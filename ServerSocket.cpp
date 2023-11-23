@@ -103,6 +103,7 @@ void ServerSocket::ReceiveInfo()
 				std::cout << "Closing Connection %d\n";
 			}
 			else {
+				iResult = 0;
 				continue;
 			}
 			//else {
@@ -112,7 +113,6 @@ void ServerSocket::ReceiveInfo()
 			//	return;
 			//}
 		}
-		
 	} while (iResult < 0);
 }
 

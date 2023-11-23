@@ -14,6 +14,7 @@ sf::RenderWindow SFMLView1;
 ClientSocket client;
 Players players;
 MenuWindow menu;
+Game game;
 // Déclarations anticipées des fonctions incluses dans ce module de code :
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -42,9 +43,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_CLIENT));
+
 	client.connectToServ(hWnd);
 	MSG msg;
-	Game game;
+
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
@@ -217,7 +219,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		case FD_READ:
 
-			client.ReceiveInfo();
+			client.ReceiveInfo(&game);
 
 			break;
 		case FD_CONNECT:

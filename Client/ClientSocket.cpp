@@ -1,10 +1,10 @@
+#include "Game.h"
 #include "ClientSocket.h"
+
 #include <string>
 #define DEFAULT_PORT 05213
 #include <cstdio>
-#include "Game.h"
 
-Game game;
 struct sockaddr_in hints;
 
 ClientSocket::ClientSocket() {
@@ -84,7 +84,7 @@ void ClientSocket::ShutDown()
 	}
 }
 
-void ClientSocket::ReceiveInfo()
+void ClientSocket::ReceiveInfo(Game* game)
 {
 	char recvbuf[512];
 	do {
@@ -121,7 +121,7 @@ void ClientSocket::ReceiveInfo()
 
 			if (pos == "A1" || pos == "A2" || pos == "A3" || pos == "B1" || pos == "B2" || pos == "B3" || pos == "C1" || pos == "C2" || pos == "C3")
 			{
-				game.BoardModif(pos, token);
+				game->BoardModif(pos, token);
 			}
 			std::cout << "Bytes received: %d\n", iResult;
 		}
