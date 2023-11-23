@@ -1,7 +1,13 @@
 #include "Game.h"
 
+
 Game::Game()
     : currentPlayer(Player::Cross)
+{
+    Init();
+}
+
+void Game::Init()
 {
     for (int i = 0; i < _SIZE; ++i) {
         for (int j = 0; j < _SIZE; ++j) {
@@ -17,12 +23,15 @@ void Game::HandleInput(sf::RenderWindow& window)
         if (event.type == sf::Event::Closed) {
             window.close();
         }
-        if (event.type == sf::Event::MouseButtonPressed) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                if (currentPlayer == Player::Cross) {
-                    HandleMouseClick(window);
+        if (event.type == sf::Event::MouseButtonPressed && m_client.canPlay) {
+            if (currentPlayer == Player::Cross && m_client.index == 0 ||currentPlayer == Player::Circle && m_client.index == 1) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    if (currentPlayer == Player::Cross || currentPlayer == Player::Circle) {
+                        HandleMouseClick(window);
+                    }
                 }
             }
+           
         }
     }
 }
@@ -30,79 +39,169 @@ void Game::HandleInput(sf::RenderWindow& window)
 void Game::HandleMouseClick(sf::RenderWindow& window)
 {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    int col = mousePos.x / (WINDOW_SIZE / _SIZE);
-    int row = mousePos.y / (WINDOW_SIZE / _SIZE);
+    int col = (mousePos.x - INFO_SIZE) / (GRID_SIZE / _SIZE);
+    int row = mousePos.y / (GRID_SIZE / _SIZE);
 
-    if (col >= 0 && col < _SIZE && row >= 0 && row < _SIZE && board[row][col] == Player::None) {
+    if (col >= 0 && col < _SIZE && row >= 0 && row < _SIZE && board[row][col] == Player::None && mousePos.x > INFO_SIZE) {
         board[row][col] = currentPlayer;
-        CheckWinner();
+        CheckPosBoard(row, col);
+        m_client.SendInfo(changeToken.c_str());
+        SwitchPlayer();
+        std::string token;
+
+        if (CheckWinner())
+        {
+            std::string win = "playerWin";
+            m_client.SendInfo(win.c_str());
+        }
         if (end == false)
         {
             SwitchPlayer();
         }
-        if (currentPlayer == Player::Circle) {
-            AIMove();
+    }
+}
+
+void Game::CheckPosBoard(int row, int col)
+{
+                switch (row)
+                {
+                case 0:
+                    changeToken = "A" + std::to_string(col + 1);
+                    break;
+                case 1:
+                    changeToken = "B" + std::to_string(col + 1);
+                    break;
+                case 2:
+                    changeToken = "C" + std::to_string(col + 1);
+                    break;
+                default:
+                    break;
+                }
+}
+
+void Game::BoardModif(std::string pos, std::string token)
+{
+    if (pos == "A1")
+    {
+        if (token == "1")
+        {
+            board[0][0] = Player::Cross;
+        }
+        else
+        {
+            board[0][0] = Player::Circle;
+        }
+    }
+    else if (pos == "A2")
+    {
+        if (token == "1")
+        {
+            board[0][1] = Player::Cross;
+        }
+        else
+        {
+            board[0][1] = Player::Circle;
+        }
+    }
+    else if (pos == "A3")
+    {
+        if (token == "1")
+        {
+            board[0][2] = Player::Cross;
+        }
+        else
+        {
+            board[0][2] = Player::Circle;
+        }
+    }
+    else if (pos == "B1")
+    {
+        if (token == "1")
+        {
+            board[1][0] = Player::Cross;
+        }
+        else
+        {
+            board[1][0] = Player::Circle;
+        }
+    }
+    else if (pos == "B2")
+    {
+        if (token == "1")
+        {
+            board[1][1] = Player::Cross;
+        }
+        else
+        {
+            board[1][1] = Player::Circle;
+        }
+    }
+    else if (pos == "B3")
+    {
+        if (token == "1")
+        {
+            board[1][2] = Player::Cross;
+        }
+        else
+        {
+            board[1][2] = Player::Circle;
+        }
+    }
+    else if (pos == "C1")
+    {
+        if (token == "1")
+        {
+            board[2][0] = Player::Cross;
+        }
+        else
+        {
+            board[2][0] = Player::Circle;
+        }
+    }
+    else if (pos == "C2")
+    {
+        if (token == "1")
+        {
+            board[2][1] = Player::Cross;
+        }
+        else
+        {
+            board[2][1] = Player::Circle;
+        }
+    }
+    else if (pos == "C3")
+    {
+        if (token == "1")
+        {
+            board[2][2] = Player::Cross;
+        }
+        else
+        {
+            board[2][2] = Player::Circle;
         }
     }
 }
 
-void Game::AIMove()
+void Game::Update(sf::RenderWindow& window, ClientSocket client)
 {
-    std::vector<std::pair<int, int>> availableMoves;
-
-    for (int i = 0; i < _SIZE; ++i) {
-        for (int j = 0; j < _SIZE; ++j) {
-            if (board[i][j] == Player::None) {
-                availableMoves.push_back(std::make_pair(i, j));
-            }
-        }
-    }
-
-    if (!availableMoves.empty()) {
-        std::srand(std::time(0));
-        int randomIndex = std::rand() % availableMoves.size();
-        std::pair<int, int> move = availableMoves[randomIndex];
-        board[move.first][move.second] = currentPlayer;
-        CheckWinner();
-        SwitchPlayer();
-    }
-}
-
-void Game::AICheckWin()
-{
-    /*for (int i = 0; i < SIZE; ++i) {
-        for (int j = 0; j < SIZE; ++j) {
-            if (board[i][j] == Player::None) {
-
-                board[i][j] = Player::Cross;
-
-
-
-                board[i][j] = Player::None;
-            }
-        }
-    }*/
-}
-
-void Game::Update(sf::RenderWindow& window)
-{
+    m_client = client;
     HandleInput(window);
 }
 
-void Game::Render(sf::RenderWindow& window)
+void Game::Render(sf::RenderWindow& window, Players* players)
 {
     window.clear();
 
     for (int i = 1; i < _SIZE; ++i) {
         sf::Vertex line[] = {
-            sf::Vector2f(i * WINDOW_SIZE / _SIZE, 0),
-            sf::Vector2f(i * WINDOW_SIZE / _SIZE, WINDOW_SIZE)
+            sf::Vector2f(i * GRID_SIZE / _SIZE + INFO_SIZE, 0),
+            sf::Vector2f(i * GRID_SIZE / _SIZE + INFO_SIZE, GRID_SIZE)
         };
         window.draw(line, 2, sf::Lines);
 
         sf::Vertex line2[] = {
-            sf::Vector2f(0, i * WINDOW_SIZE / _SIZE),
-            sf::Vector2f(WINDOW_SIZE, i * WINDOW_SIZE / _SIZE)
+            sf::Vector2f(INFO_SIZE, i * GRID_SIZE / _SIZE),
+            sf::Vector2f(WINDOW_SIZE, i * GRID_SIZE / _SIZE)
         };
         window.draw(line2, 2, sf::Lines);
     }
@@ -118,7 +217,7 @@ void Game::Render(sf::RenderWindow& window)
         }
     }
 
-    players.Draw(window, currentPlayer);
+    players->Draw(window, currentPlayer);
 
     window.display();
 }
@@ -126,10 +225,10 @@ void Game::Render(sf::RenderWindow& window)
 void Game::DrawPlayer1(sf::RenderWindow& window, int row, int col)
 {
     sf::VertexArray cross(sf::Lines, 4);
-    cross[0].position = sf::Vector2f(col * WINDOW_SIZE / _SIZE, row * WINDOW_SIZE / _SIZE);
-    cross[1].position = sf::Vector2f((col + 1) * WINDOW_SIZE / _SIZE, (row + 1) * WINDOW_SIZE / _SIZE);
-    cross[2].position = sf::Vector2f((col + 1) * WINDOW_SIZE / _SIZE, row * WINDOW_SIZE / _SIZE);
-    cross[3].position = sf::Vector2f(col * WINDOW_SIZE / _SIZE, (row + 1) * WINDOW_SIZE / _SIZE);
+    cross[0].position = sf::Vector2f(col * GRID_SIZE / _SIZE + INFO_SIZE, row * GRID_SIZE / _SIZE);
+    cross[1].position = sf::Vector2f((col + 1) * GRID_SIZE / _SIZE + INFO_SIZE, (row + 1) * GRID_SIZE / _SIZE);
+    cross[2].position = sf::Vector2f((col + 1) * GRID_SIZE / _SIZE + INFO_SIZE, row * GRID_SIZE / _SIZE);
+    cross[3].position = sf::Vector2f(col * GRID_SIZE / _SIZE + INFO_SIZE, (row + 1) * GRID_SIZE / _SIZE);
 
     for (int i = 0; i < 4; ++i) {
         cross[i].color = sf::Color::Red;
@@ -140,8 +239,8 @@ void Game::DrawPlayer1(sf::RenderWindow& window, int row, int col)
 
 void Game::DrawPlayer2(sf::RenderWindow& window, int row, int col)
 {
-    sf::CircleShape circle(WINDOW_SIZE / _SIZE / 2 - 5);
-    circle.setPosition(col * WINDOW_SIZE / _SIZE, row * WINDOW_SIZE / _SIZE);
+    sf::CircleShape circle(GRID_SIZE / _SIZE / 2 - 5);
+    circle.setPosition(col * GRID_SIZE / _SIZE + INFO_SIZE, row * GRID_SIZE / _SIZE);
     circle.setFillColor(sf::Color::Blue);
     circle.setOutlineThickness(5);
     circle.setOutlineColor(sf::Color::Blue);
@@ -154,33 +253,38 @@ void Game::SwitchPlayer()
     currentPlayer = (currentPlayer == Player::Cross) ? Player::Circle : Player::Cross;
 }
 
-void Game::CheckWinner()
+bool Game::CheckWinner()
 {
     // lignes et colonnes
     for (int i = 0; i < _SIZE; ++i) {
         if (board[i][0] != Player::None && board[i][0] == board[i][1] && board[i][0] == board[i][2]) {
             DisplayWinner();
-            return;
+            return true;
         }
         if (board[0][i] != Player::None && board[0][i] == board[1][i] && board[0][i] == board[2][i]) {
             DisplayWinner();
-            return;
+            return true;
         }
     }
 
     // diagonales
     if (board[0][0] != Player::None && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
         DisplayWinner();
-        return;
+        return true;
     }
     if (board[0][2] != Player::None && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
         DisplayWinner();
-        return;
+        return true;
     }
+    return false;
 }
 
 void Game::DisplayWinner()
 {
-    //std::cout << "Player " << static_cast<int>(currentPlayer) << " wins!\n";
-    end = true;
+    /*end = true;*/
+    for (int i = 0; i < _SIZE; ++i) {
+        for (int j = 0; j < _SIZE; ++j) {
+            board[i][j] = Player::None;
+        }
+    }
 }

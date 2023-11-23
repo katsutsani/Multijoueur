@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <winsock2.h>
+class Players;
+class Game;
 
 class ClientSocket {
 public:
@@ -14,10 +16,12 @@ public:
 	SOCKET ConnectSocket = INVALID_SOCKET;
 	void SendInfo(const char* sendbuf);
 	void ShutDown();
-	void ReceiveInfo();
+	void ReceiveInfo(Game* game, Players* player);
 	void connectToServ(HWND hWnd);
+	int index = -1;
+	bool canPlay = false;
 private:
-	int index;
+
 	int iResult;
 	WSADATA wsaData;
 

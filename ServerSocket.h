@@ -11,6 +11,7 @@ class ServerSocket {
 		SOCKET ListenSocket = INVALID_SOCKET;
 		void ReceiveInfo();
 		void SendInfo(SOCKET clientSocket, const char* sendBuf);
+		void SendInfoBis(const char* sendBuf);
 		int players = 0;
 		int actualPlayer = 0;
 		void changeKey();

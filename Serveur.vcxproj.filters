@@ -30,6 +30,7 @@
     <ClInclude Include="ServerSocket.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="JSON.h">
     <ClInclude Include="ServThread.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -62,6 +63,9 @@
     <ClCompile Include="ServerSocket.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="JSON.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Serveur.rc">
@@ -75,5 +79,11 @@
     <Image Include="Serveur.ico">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="player.json">
+      <Filter>Fichiers sources</Filter>
+    </None>
+    <None Include="game.json" />
   </ItemGroup>
 </Project>

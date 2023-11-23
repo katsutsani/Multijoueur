@@ -1,7 +1,11 @@
+#include "Game.h"
+#include "Players.h"
 #include "ClientSocket.h"
+
 #include <string>
 #define DEFAULT_PORT 05213
 #include <cstdio>
+
 struct sockaddr_in hints;
 
 ClientSocket::ClientSocket() {
@@ -15,7 +19,7 @@ ClientSocket::ClientSocket() {
 	hints.sin_family = AF_INET;
 	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.1.170.51", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "10.189.141.66", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -81,20 +85,80 @@ void ClientSocket::ShutDown()
 	}
 }
 
-void ClientSocket::ReceiveInfo()
+void ClientSocket::ReceiveInfo(Game* game, Players* player)
 {
 	char recvbuf[512];
 	do {
 		iResult = recv(ConnectSocket, recvbuf, 512, 0);
 		if (iResult > 0) {
-			index << recvbuf[0];
+			if (index == -1) {
+				index = recvbuf[0] - '0';
+			}
+			std::string checkAllPlayer;
+			for (int i = 0; i < 7; i++) {
+				checkAllPlayer.push_back(recvbuf[i]);
+			}
+			if (checkAllPlayer == "player1") {
+				checkAllPlayer.clear();
+
+				for (int k = 7; k < iResult; k++)
+				{
+					checkAllPlayer.push_back(recvbuf[k]);
+				}
+				if (checkAllPlayer != "") {
+					player->SetPlayersString(checkAllPlayer, 0);
+					canPlay = true;
+				}
+
+			}
+			else if (checkAllPlayer == "player2") {
+				checkAllPlayer.clear();
+
+				for (int k = 7; k < iResult; k++)
+				{
+					checkAllPlayer.push_back(recvbuf[k]);
+				}
+				if (checkAllPlayer != "") {
+					player->SetPlayersString(checkAllPlayer, 1);
+					canPlay = true;
+				}
+			}
 			if (recvbuf[1] == 'S') {
-				SendInfo("i'm Spectator");
+				SendInfo("I'm spectator");
 			}
 			else if (recvbuf[1] == 'P') {
 				std::string tempString = "I'm player " + std::to_string(index);
 				SendInfo(tempString.c_str());
 			}
+
+			std::string pos;
+			for (int j = 0; j < 2; j++)
+			{
+				pos.push_back(recvbuf[j]);
+			}
+			std::string token;
+			token = recvbuf[2];
+
+			if (pos == "A1" || pos == "A2" || pos == "A3" || pos == "B1" || pos == "B2" || pos == "B3" || pos == "C1" || pos == "C2" || pos == "C3")
+			{
+				game->SwitchPlayer();
+				game->BoardModif(pos, token);
+				if (recvbuf[9] == '1' || recvbuf[9] == '2')
+				{
+					int ID;
+					if (recvbuf[9] == '1')
+					{
+						ID = 1;
+					}
+					else
+					{
+						ID = 2;
+					}
+					player->RenderWinner(ID);
+					game->Init();
+				}
+			}
+
 			std::cout << "Bytes received: %d\n", iResult;
 		}
 		else if (iResult == 0) {

@@ -6,7 +6,6 @@
 #include <SFML/Graphics.hpp>
 #include "targetver.h"
 #define WIN32_LEAN_AND_MEAN   // Exclure les en-têtes Windows rarement utilisés
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
 // Fichiers d'en-tête Windows
 #include <windows.h>
 // Fichiers d'en-tête C RunTime

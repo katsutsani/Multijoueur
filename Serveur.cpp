@@ -1,12 +1,12 @@
 // Serveur.cpp : Définit le point d'entrée de l'application.
 //
 
-#include "framework.h"
 #include "Serveur.h"
 #include "ServerSocket.h"
 #include "ServThread.h"
 #include "ServWebThread.h"
 #include <string>
+#include "JSON.h"
 
 #define MAX_LOADSTRING 100
 
@@ -17,6 +17,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // nom de la classe de fenêtre 
 HWND hWnd;
 bool isPlaying = false;
 SOCKET tempClientSocket;
+JSON jsonData;
 std::string tempString;
 ServThread servThread;
 HANDLE allThreads[2];
@@ -54,7 +55,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	servWebThread.createServerWebThread(hWnd);
 	allThreads[0] = servThread.GetThread();
 	allThreads[1] = servWebThread.GetThread();
-
 	// Boucle de messages principale :
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
@@ -192,7 +192,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			else {
 				tempString = std::to_string(servThread.GetSock().players) + "P";
-
 			}
 			servThread.GetSock().SendInfo(servThread.GetSock().ClientSocket[servThread.GetSock().players], tempString.c_str());
 			servThread.GetSock().addClient();
