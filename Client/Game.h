@@ -11,10 +11,9 @@ class Game
 {
 public:
 	Game();
+	void Init();
 	void HandleInput(sf::RenderWindow& window);
 	void HandleMouseClick(sf::RenderWindow& window);
-	void AIMove();
-	void AICheckWin();
 	void Update(sf::RenderWindow& window, ClientSocket client);
 	void Render(sf::RenderWindow& window, Players* players);
 	void DrawPlayer1(sf::RenderWindow& window, int row, int col);
