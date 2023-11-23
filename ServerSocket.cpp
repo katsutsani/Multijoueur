@@ -16,7 +16,7 @@ ServerSocket::ServerSocket() {
 	hints.sin_family = AF_INET;
 	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.1.170.51", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "10.1.2.10", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -54,7 +54,19 @@ void ServerSocket::ReceiveInfo()
 		{
 			iResult = recv(ClientSocket[i], recvbuf, 512, 0);
 			if (iResult > 0) {
-
+				std::string win;
+				for (int j = 3; j < 12; j++)
+				{
+					win.push_back(recvbuf[j]);
+				}
+				if (win == "playerWin")
+				{
+					int ID = i + 1;
+					win = win + std::to_string(ID);
+					SendInfoBis(win.c_str());
+					win.clear();
+				}
+				//--------------------------------------------------------------
 				std::string checkname;
 				if (recvbuf[1] == '1' || recvbuf[1] == '2' || recvbuf[1] == '3') 
 				{
@@ -63,6 +75,7 @@ void ServerSocket::ReceiveInfo()
 					pos.push_back(recvbuf[1]);
 					// change board
 					jsonGame.UpdateGame(pos, std::to_string(i + 1));
+					SendInfoBis(pos.c_str());
 					pos.clear();
 				}
 				for (int j = 0; j < 4; j++)
@@ -82,7 +95,7 @@ void ServerSocket::ReceiveInfo()
 
 					checkname.clear();
 				}
-
+				//----------------------------------------------------------------------------
 				std::cout << "Bytes received: %d\n", iResult;
 			}
 			else if (iResult == 0) {
@@ -111,5 +124,20 @@ void ServerSocket::SendInfo(SOCKET clientSocket, const char* sendBuf)
 		WSACleanup();
 		return;
 	}
+}
+
+void ServerSocket::SendInfoBis(const char* sendBuf)
+{
+	for (int i = 0; i < ClientSocket.size(); i++)
+	{
+		iResult = send(ClientSocket[i], sendBuf, (int)strlen(sendBuf), 0);
+			if (iResult == SOCKET_ERROR) {
+				std::cout << "send failed %d\n", WSAGetLastError();
+				closesocket(ClientSocket[i]);
+				WSACleanup();
+				return;
+			}
+	}
+	
 }
 

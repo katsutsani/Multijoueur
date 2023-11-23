@@ -21,9 +21,10 @@ public:
 	void DrawPlayer1(sf::RenderWindow& window, int row, int col);
 	void DrawPlayer2(sf::RenderWindow& window, int row, int col);
 	void SwitchPlayer();
-	void CheckWinner();
+	bool CheckWinner();
 	void DisplayWinner();
 	void CheckPosBoard();
+	void BoardModif(std::string pos, std::string token);
 	ClientSocket m_client;
 
 	Player currentPlayer;

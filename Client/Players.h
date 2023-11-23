@@ -14,10 +14,12 @@ class Players
 public :
 	Players();
 	void Draw(sf::RenderWindow& window, Player currentPlayer);
+	void RenderWinner(int ID);
 
 private :
 	sf::Font font;
 	sf::Text player1;
 	sf::Text player2;
+	bool change = false;
 
 };

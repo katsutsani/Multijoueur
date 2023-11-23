@@ -37,7 +37,21 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
         board[row][col] = currentPlayer;
         CheckPosBoard();
         m_client.SendInfo(changeToken.c_str());
-        CheckWinner();
+        std::string token;
+        if (currentPlayer == Player::Cross)
+        {
+            token = '1';
+        }
+        if (currentPlayer == Player::Circle)
+        {
+            token = '2';
+        }
+        m_client.SendInfo(token.c_str());
+        if (CheckWinner())
+        {
+            std::string win = "playerWin";
+            m_client.SendInfo(win.c_str());
+        }
         if (end == false)
         {
             SwitchPlayer();
@@ -71,6 +85,110 @@ void Game::CheckPosBoard()
         }
     }
 }
+
+void Game::BoardModif(std::string pos, std::string token)
+{
+    if (pos == "A1")
+    {
+        if (token == "1")
+        {
+            board[0][0] = Player::Cross;
+        }
+        else
+        {
+            board[0][0] = Player::Circle;
+        }
+    }
+    else if (pos == "A2")
+    {
+        if (token == "1")
+        {
+            board[0][1] = Player::Cross;
+        }
+        else
+        {
+            board[0][1] = Player::Circle;
+        }
+    }
+    else if (pos == "A3")
+    {
+        if (token == "1")
+        {
+            board[0][2] = Player::Cross;
+        }
+        else
+        {
+            board[0][2] = Player::Circle;
+        }
+    }
+    else if (pos == "B1")
+    {
+        if (token == "1")
+        {
+            board[1][0] = Player::Cross;
+        }
+        else
+        {
+            board[1][0] = Player::Circle;
+        }
+    }
+    else if (pos == "B2")
+    {
+        if (token == "1")
+        {
+            board[1][1] = Player::Cross;
+        }
+        else
+        {
+            board[1][1] = Player::Circle;
+        }
+    }
+    else if (pos == "B3")
+    {
+        if (token == "1")
+        {
+            board[1][2] = Player::Cross;
+        }
+        else
+        {
+            board[1][2] = Player::Circle;
+        }
+    }
+    else if (pos == "C1")
+    {
+        if (token == "1")
+        {
+            board[2][0] = Player::Cross;
+        }
+        else
+        {
+            board[2][0] = Player::Circle;
+        }
+    }
+    else if (pos == "C2")
+    {
+        if (token == "1")
+        {
+            board[2][1] = Player::Cross;
+        }
+        else
+        {
+            board[2][1] = Player::Circle;
+        }
+    }
+    else if (pos == "C3")
+    {
+        if (token == "1")
+        {
+            board[2][2] = Player::Cross;
+        }
+        else
+        {
+            board[2][2] = Player::Circle;
+        }
+    }
+}
+
 
 void Game::AIMove()
 {
@@ -181,29 +299,30 @@ void Game::SwitchPlayer()
     currentPlayer = (currentPlayer == Player::Cross) ? Player::Circle : Player::Cross;
 }
 
-void Game::CheckWinner()
+bool Game::CheckWinner()
 {
     // lignes et colonnes
     for (int i = 0; i < _SIZE; ++i) {
         if (board[i][0] != Player::None && board[i][0] == board[i][1] && board[i][0] == board[i][2]) {
             DisplayWinner();
-            return;
+            return true;
         }
         if (board[0][i] != Player::None && board[0][i] == board[1][i] && board[0][i] == board[2][i]) {
             DisplayWinner();
-            return;
+            return true;
         }
     }
 
     // diagonales
     if (board[0][0] != Player::None && board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
         DisplayWinner();
-        return;
+        return true;
     }
     if (board[0][2] != Player::None && board[0][2] == board[1][1] && board[0][2] == board[2][0]) {
         DisplayWinner();
-        return;
+        return true;
     }
+    return false;
 }
 
 void Game::DisplayWinner()

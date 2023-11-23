@@ -2,6 +2,12 @@
 #include <string>
 #define DEFAULT_PORT 05213
 #include <cstdio>
+#include "Game.h"
+
+Players players;
+Game game;
+
+Players player;
 struct sockaddr_in hints;
 
 ClientSocket::ClientSocket() {
@@ -15,7 +21,7 @@ ClientSocket::ClientSocket() {
 	hints.sin_family = AF_INET;
 	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.1.170.51", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "10.1.2.10", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -94,6 +100,31 @@ void ClientSocket::ReceiveInfo()
 			else if (recvbuf[1] == 'P') {
 				std::string tempString = "I'm player " + std::to_string(index);
 				SendInfo(tempString.c_str());
+			}
+			if (recvbuf[9] == '1' || recvbuf[9] == '2')
+			{
+				int ID;
+				if (recvbuf[9] == '1')
+				{
+					ID = 1;
+				}
+				else
+				{
+					ID = 2;
+				}
+				players.RenderWinner(ID);
+			}
+			std::string pos;
+			for (int j = 0; j < 2; j++)
+			{
+				pos = recvbuf[j];
+			}
+			std::string token;
+			token = recvbuf[2];
+
+			if (pos == "A1" || pos == "A2" || pos == "A3" || pos == "B1" || pos == "B2" || pos == "B3" || pos == "C1" || pos == "C2" || pos == "C3")
+			{
+				game.BoardModif(pos, token);
 			}
 			std::cout << "Bytes received: %d\n", iResult;
 		}

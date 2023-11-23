@@ -47,10 +47,29 @@ void Players::Draw(sf::RenderWindow& window, Player currentPlayer)
 		player1.setFillColor(sf::Color::White);
 		player2.setFillColor(sf::Color::Green);
 	}
+
+	if (change == true)
+	{
+		player1.setFillColor(sf::Color::Red);
+		player2.setFillColor(sf::Color::Red);
+	}
 		
 
 	window.draw(player1);
 	window.draw(cross);
 	window.draw(player2);
 	window.draw(circle);
+}
+
+
+void Players::RenderWinner(int ID)
+{
+	if (ID == 1)
+	{
+		change = true;
+	}
+	else if (ID == 2)
+	{
+		change = true;
+	}
 }
