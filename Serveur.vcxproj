@@ -135,23 +135,15 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="JSON.h" />
-    <ClInclude Include="ServThread.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ServerSocket.h" />
     <ClInclude Include="Serveur.h" />
-    <ClInclude Include="ServWebSock.h" />
-    <ClInclude Include="ServWebThread.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Threads.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="ServerSocket.cpp" />
-    <ClCompile Include="ServThread.cpp" />
     <ClCompile Include="Serveur.cpp" />
-    <ClCompile Include="ServWebSock.cpp" />
-    <ClCompile Include="ServWebThread.cpp" />
-    <ClCompile Include="Threads.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Serveur.rc" />

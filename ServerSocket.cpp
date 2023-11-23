@@ -4,7 +4,7 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 struct sockaddr_in hints;
 JSON jsonGame;
-sockaddr_in webServerAddr;
+
 ServerSocket::ServerSocket() {
 	jsonGame.RestartGame();
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -13,9 +13,9 @@ ServerSocket::ServerSocket() {
 		return;
 	}
 
-	ZeroMemory(&servHints, sizeof(servHints));
-	servHints.sin_family = AF_INET;
-	servHints.sin_port = htons(DEFAULT_PORT);
+	ZeroMemory(&hints, sizeof(hints));
+	hints.sin_family = AF_INET;
+	hints.sin_port = htons(DEFAULT_PORT);
 
 	iResult = inet_pton(hints.sin_family, "10.189.141.66", &hints.sin_addr);
 	if (iResult != 1) {
@@ -33,27 +33,18 @@ ServerSocket::ServerSocket() {
 		return;
 	}
 
-	iResult = bind(ListenSocket, (struct sockaddr*)&servHints, sizeof(servHints));
+	iResult = bind(ListenSocket, (struct sockaddr*)&hints, sizeof(hints));
 	if (iResult == SOCKET_ERROR) {
 		printf("bind failed with error: %d\n", WSAGetLastError());
 		closesocket(ListenSocket);
 		WSACleanup();
 		return;
 	}
+
 }
 
 ServerSocket::~ServerSocket()
 {
-}
-
-void ServerSocket::addClient()
-{
-	players++;
-}
-
-void ServerSocket::removeClient()
-{
-	players--;
 }
 
 void ServerSocket::ReceiveInfo()
