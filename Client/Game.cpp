@@ -35,8 +35,10 @@ void Game::HandleMouseClick(sf::RenderWindow& window)
     int row = mousePos.y / (GRID_SIZE / _SIZE);
 
     if (col >= 0 && col < _SIZE && row >= 0 && row < _SIZE && board[row][col] == Player::None && mousePos.x > INFO_SIZE) {
+        board[row][col] = currentPlayer;
         CheckPosBoard();
         m_client.SendInfo(changeToken.c_str());
+        board[row][col] = Player::None;
         std::string token;
         if (CheckWinner())
         {
