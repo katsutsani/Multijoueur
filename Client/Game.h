@@ -22,7 +22,7 @@ public:
 	void SwitchPlayer();
 	bool CheckWinner();
 	void DisplayWinner();
-	void CheckPosBoard();
+	void CheckPosBoard(int row, int col);
 	void BoardModif(std::string pos, std::string token);
 	ClientSocket m_client;
 
