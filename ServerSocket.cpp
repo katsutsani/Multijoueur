@@ -6,6 +6,7 @@ struct sockaddr_in hints;
 JSON jsonGame;
 
 ServerSocket::ServerSocket() {
+	jsonGame.RestartGame();
 	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (iResult != 0) {
 		printf("WSAStartup failed: %d\n", iResult);
@@ -65,6 +66,7 @@ void ServerSocket::ReceiveInfo()
 					win = win + std::to_string(ID);
 					jsonGame.victory(i);
 					SendInfoBis(win.c_str());
+					jsonGame.RestartGame();
 					win.clear();
 				}
 				//--------------------------------------------------------------
@@ -76,7 +78,8 @@ void ServerSocket::ReceiveInfo()
 					pos.push_back(recvbuf[1]);
 					// change board
 					jsonGame.UpdateGame(pos, std::to_string(i + 1));
-					pos.push_back(recvbuf[2]);
+					std::string pIndex = std::to_string(i+1);
+					pos.push_back(pIndex.c_str()[0]);
 					SendInfoBis(pos.c_str());
 					pos.clear();
 				}
