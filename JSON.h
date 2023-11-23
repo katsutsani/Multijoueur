@@ -20,7 +20,7 @@ public:
 	void CheckPlayer(std::string player);
 	bool CreatePlayer(std::string player);
 	void function();
-	void victory(std::string player);
+	void victory(int player);
 
 private:
 	int nbPlayer = 0; 
