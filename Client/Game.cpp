@@ -4,6 +4,11 @@
 Game::Game()
     : currentPlayer(Player::Cross)
 {
+    Init();
+}
+
+void Game::Init()
+{
     for (int i = 0; i < _SIZE; ++i) {
         for (int j = 0; j < _SIZE; ++j) {
             board[i][j] = Player::None;

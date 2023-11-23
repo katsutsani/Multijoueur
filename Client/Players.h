@@ -21,6 +21,7 @@ private :
 	sf::Font font;
 	sf::Text player1;
 	sf::Text player2;
-	bool change = false;
+	float pos1 = GRID_SIZE - 40;
+	float pos2 = 2;
 
 };

@@ -63,12 +63,6 @@ void Players::Draw(sf::RenderWindow& window, Player currentPlayer)
 		player1.setFillColor(sf::Color::White);
 		player2.setFillColor(sf::Color::Green);
 	}
-
-	if (change == true)
-	{
-		player1.setFillColor(sf::Color::Red);
-		player2.setFillColor(sf::Color::Red);
-	}
 		
 
 	window.draw(player1);
@@ -82,10 +76,10 @@ void Players::RenderWinner(int ID)
 {
 	if (ID == 1)
 	{
-		change = true;
+		pos1 = GRID_SIZE - 40 / 2;
 	}
 	else if (ID == 2)
 	{
-		change = true;
+		pos2 = GRID_SIZE - 40 / 2;
 	}
 }

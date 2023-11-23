@@ -111,6 +111,7 @@ void ClientSocket::ReceiveInfo(Game* game, Players* player)
 					ID = 2;
 				}
 				player->RenderWinner(ID);
+				game->Init();
 			}
 			std::string pos;
 			for (int j = 0; j < 2; j++)
