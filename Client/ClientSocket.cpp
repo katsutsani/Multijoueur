@@ -4,10 +4,7 @@
 #include <cstdio>
 #include "Game.h"
 
-Players players;
 Game game;
-
-Players player;
 struct sockaddr_in hints;
 
 ClientSocket::ClientSocket() {
@@ -21,7 +18,7 @@ ClientSocket::ClientSocket() {
 	hints.sin_family = AF_INET;
 	hints.sin_port = htons(DEFAULT_PORT);
 
-	iResult = inet_pton(hints.sin_family, "10.1.2.10", &hints.sin_addr);
+	iResult = inet_pton(hints.sin_family, "192.168.76.209", &hints.sin_addr);
 	if (iResult != 1) {
 		WSAGetLastError();
 		printf("inet_pton failed %d\n", iResult);
@@ -112,7 +109,7 @@ void ClientSocket::ReceiveInfo()
 				{
 					ID = 2;
 				}
-				players.RenderWinner(ID);
+				//players.RenderWinner(ID);
 			}
 			std::string pos;
 			for (int j = 0; j < 2; j++)

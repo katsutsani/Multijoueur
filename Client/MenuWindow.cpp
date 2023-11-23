@@ -72,7 +72,7 @@ void MenuWindow::Enter(sf::RenderWindow& window, std::string name, ClientSocket 
     }
     else
     {
-        name.erase(name.begin())
+        name.erase(name.begin());
         p->SetPlayersString(name, client.index);
         name = "name" + name;
         client.SendInfo(name.c_str());
